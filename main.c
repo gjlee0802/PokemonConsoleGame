@@ -40,7 +40,7 @@ void sceneMap(scene *Sptr)
 {
 	switch(Sptr->sceneNum)
 	{
-	int i=0, j=0;
+	int i=0, j=0, k=0;
 	case 0:
 		
 		for(i=0; i<FIELD_SIZE; i++)
@@ -58,14 +58,17 @@ void sceneMap(scene *Sptr)
 				Sptr->Coor[i][j]='M';
 		for(j=1+5; j<(1+5)+5; j++)
 			Sptr->Coor[j][(1+5+5)+1]='^';
-		
+
+		for(i=0; i<1+5; i++)
+		{
+			Sptr->Coor[5+1+i][20+1-i]='/';
+			Sptr->Coor[5+1+i][20+1+i]='\\';
+		}
 		break;
 	default:
-		for(i=0; i<FIELD_SIZE; i++)
-		{
-			for(j=0; j<FIELD_SIZE; j++)
-				Sptr->Coor[i][j] = '^';	
-		}
+		for(i=0;i<FIELD_SIZE;i++)
+			for(j=0;j<FIELD_SIZE;j++)
+				Sptr->Coor[i][j]='^';
 	}
 
 }
