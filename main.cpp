@@ -1,8 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
-#include <time.h>
-#include <unistd.h>
+#include <time.h>	//use srand() function
 #include <stdlib.h>
 #include <conio.h>	//for Windows OS
 
