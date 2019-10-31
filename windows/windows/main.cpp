@@ -46,12 +46,16 @@ int main()
 		{
 		case UP:
 			move(Sptr, n);
+			break;
 		case DOWN:
 			move(Sptr, n);
+			break;
 		case LEFT:
 			move(Sptr, n);
+			break;
 		case RIGHT:
 			move(Sptr, n);
+			break;
 		}
 		sceneMap(Sptr);
 		scenePrint(Sptr);
@@ -148,45 +152,46 @@ void move(scene *Sptr, int keyInput)
 	switch (keyInput)
 	{
 	case UP:
-		if (!isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) - 1))
-			Sptr->HeroY -= 1;
+		if (!(isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) - 1)))
+			Sptr->HeroY = Sptr->HeroY - 1;
 		else
-			printf("Colider detected!\n");
+			printf("Colision detected!\n");
 		break;
 	case DOWN:
-		if (!isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) + 1))
-			Sptr->HeroY += 1;
+		if (!(isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) + 1)))
+			Sptr->HeroY = Sptr->HeroY + 1;
 		else
-			printf("Colider detected!\n");
+			printf("Colision detected!\n");
 		break;
 	case LEFT:
-		if (!isColi(Sptr, (Sptr->HeroX) - 1, (Sptr->HeroY)))
-			Sptr->HeroX -= 1;
+		if (!(isColi(Sptr, (Sptr->HeroX) - 1, (Sptr->HeroY))))
+			Sptr->HeroX = (Sptr->HeroX) - 1;
 		else
-			printf("Colider detected!\n");
+			printf("Colision detected!\n");
 		break;
 	case RIGHT:
-		if (!isColi(Sptr, (Sptr->HeroX) + 1, (Sptr->HeroY)))
-			Sptr->HeroX += 1;
+		if (!(isColi(Sptr, (Sptr->HeroX) + 1, (Sptr->HeroY))))
+			Sptr->HeroX = (Sptr->HeroX) + 1;
 		else
-			printf("Colider detected!\n");
+			printf("Colision detected!\n");
 		break;
 	default:
-		printf("move() err : cant understand keyinput : %d\n", keyInput);
+		printf("move() err : can't understand keyinput : %d\n", keyInput);
 	}
+	printf("Hero : (%d, %d)\n", Sptr->HeroX, Sptr->HeroY);
 }
 
 int isColi(scene *Sptr, int x, int y)
 {
-	if (Sptr->Coor[x][y] == '^' ||
-		Sptr->Coor[x][y] == '|' ||
-		Sptr->Coor[x][y] == '/' ||
-		Sptr->Coor[x][y] == '\\' ||
-		Sptr->Coor[x][y] == '='
+	if (Sptr->Coor[y][x] == '^' ||
+		Sptr->Coor[y][x] == '|' ||
+		Sptr->Coor[y][x] == '/' ||
+		Sptr->Coor[y][x] == '\\' ||
+		Sptr->Coor[y][x] == '='
 		)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 int keyControl()
