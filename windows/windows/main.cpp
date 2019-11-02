@@ -39,6 +39,9 @@ int main()
 	Sptr->sceneNum = 0;
 	Sptr->HeroX = 8;
 	Sptr->HeroY = 24;
+	
+	sceneMap(Sptr);
+	scenePrint(Sptr);
 	while (1)
 	{
 		int n = keyControl();
@@ -83,12 +86,14 @@ void sceneMap(scene *Sptr)
 			for (j = 1; j < FIELD_SIZE - 1; j++)
 				Sptr->Coor[i][j] = ' ';
 
+
 		// 
 		for (i = 1 + 5; i < (1 + 5) + 5; i++)
 			for (j = 1 + 5; j < (1 + 5) + 5; j++)
 				Sptr->Coor[i][j] = 'M';
 		for (j = 1 + 5; j < (1 + 5) + 5; j++)
 			Sptr->Coor[j][(1 + 5 + 5) + 1] = '^';
+
 
 		// House
 		for (i = 0; i < 1 + 5; i++)
@@ -107,9 +112,34 @@ void sceneMap(scene *Sptr)
 		for (j = 3; j < 10; j++)
 			Sptr->Coor[23][j] = '=';
 
-		// LAB
 
-		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		// LAB								    	
+		for (j = 21; j < 21 + 7; j++)
+			Sptr->Coor[16][j] = '='; 
+		for (j = 33; j < 33 + 7; j++)
+			Sptr->Coor[16][j] = '=';
+		Sptr->Coor[16][29] = '='; Sptr->Coor[16][31] = '=';
+		Sptr->Coor[15][30] = '='; Sptr->Coor[17][30] = '='; Sptr->Coor[16][30] = 'P';
+		Sptr->Coor[16][28] = '|'; Sptr->Coor[16][32] = '|';
+		Sptr->Coor[15][29] = '/'; Sptr->Coor[15][31] = '\\';
+		Sptr->Coor[17][29] = '\\'; Sptr->Coor[17][31] = '/';
+		for (i = 17; i < 24; i++)
+		{
+			Sptr->Coor[i][21] = '|'; Sptr->Coor[i][39] = '|';
+		}
+		for (j = 22; j < 39; j++)
+			Sptr->Coor[23][j] = '=';
+		for (i = 0; i < 3; i++)
+		{
+			Sptr->Coor[15 - i][21 + i] = '/'; Sptr->Coor[15 - i][39 - i] = '\\';
+		}
+		for (j = 24; j < 37; j++)
+			Sptr->Coor[13][j] = '=';
+
+
+		// HERO
+		Sptr->Coor[Sptr->HeroY][Sptr
+			->HeroX] = 'H';
 		break;
 	default:
 		for (i = 0; i < FIELD_SIZE; i++)
