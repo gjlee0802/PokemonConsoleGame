@@ -87,12 +87,47 @@ void sceneMap(scene *Sptr)
 				Sptr->Coor[i][j] = ' ';
 
 
-		// 
+		// WOODS & BUSHES
 		for (i = 1 + 5; i < (1 + 5) + 5; i++)
 			for (j = 1 + 5; j < (1 + 5) + 5; j++)
 				Sptr->Coor[i][j] = 'M';
-		for (j = 1 + 5; j < (1 + 5) + 5; j++)
-			Sptr->Coor[j][(1 + 5 + 5) + 1] = '^';
+		for (i = 12; i <= 15; i++)
+			for (j = 1; j <= 10; j++)
+				Sptr->Coor[i][j] = 'M';
+
+		for (i = 1 + 5; i < (1 + 5) + 5; i++)
+			Sptr->Coor[i][(1 + 5 + 5) + 1] = '^';
+		for (i = 15; i <= 22; i++)
+			Sptr->Coor[i][12] = '^';
+
+		for (j = 1; j <= 14; j++)
+			Sptr->Coor[31][j] = '=';
+		for (i = 31; i <= 37; i++)
+			Sptr->Coor[i][14] = '=';
+		for (j = 15; j <= 30; j++)
+			Sptr->Coor[37][j] = '=';
+		for (i = 34; i <= 37; i++)
+			Sptr->Coor[i][31] = '=';
+		for (j = 32; j <= 40; j++)
+			Sptr->Coor[34][j] = '=';
+		for (i = 32; i <= 34; i++)
+			Sptr->Coor[i][41] = '=';
+		for (j = 42; j <= 48; j++)
+			Sptr->Coor[32][j] = '=';
+
+		for (j = 1; j < 49; j++)
+		{
+			int water_cnt = 0;
+			for (i = 31; i < 49; i++)
+				if (Sptr->Coor[i][j] == '=')
+				{
+					++water_cnt;
+				}
+				else if (water_cnt >= 1 && Sptr->Coor[i][j] == ' ')
+				{
+					Sptr->Coor[i][j] = '~';
+				}
+		}
 
 
 		// House
@@ -135,11 +170,26 @@ void sceneMap(scene *Sptr)
 		}
 		for (j = 24; j < 37; j++)
 			Sptr->Coor[13][j] = '=';
-
+		for (i = 20; i <= 22; i++)
+		{
+			Sptr->Coor[i][29] = '[';
+			Sptr->Coor[i][31] = ']';
+		}
+		for (j = 22; j <= 26; j = j + 2)
+		{
+			Sptr->Coor[20][j] = '(';
+			Sptr->Coor[20][j + 1] = ')';
+			Sptr->Coor[22][j] = '|'; Sptr->Coor[22][j + 1] = '|';
+		}
+		for (j = 33; j <= 37; j = j + 2)
+		{
+			Sptr->Coor[20][j] = '(';
+			Sptr->Coor[20][j + 1] = ')';
+			Sptr->Coor[22][j] = '|'; Sptr->Coor[22][j + 1] = '|';
+		}
 
 		// HERO
-		Sptr->Coor[Sptr->HeroY][Sptr
-			->HeroX] = 'H';
+		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
 	default:
 		for (i = 0; i < FIELD_SIZE; i++)
