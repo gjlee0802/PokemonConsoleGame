@@ -1,10 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
-#include <time.h>	//use srand() function
 #include <stdlib.h>
+#include <time.h>	//use srand() function
 #include <conio.h>	//for Windows OS
-
+#include <windows.h>
 #define FIELD_SIZE 50
 
 #define UP 0
@@ -12,6 +12,7 @@
 #define LEFT 2
 #define RIGHT 3
 #define SPACE 4
+#define QUIT 9
 
 struct Scene {
 	int sceneNum;
@@ -23,6 +24,8 @@ typedef struct Scene scene;
 
 
 // ** Functions
+
+
 void sceneMap(scene *);
 void scenePrint(scene *);
 
@@ -30,6 +33,12 @@ void move(scene *, int);
 int isColi(scene *, int, int);
 int keyControl();
 
+void setColor(int color, int bgcolor)
+{
+	color &= 0xf;
+	bgcolor &= 0xf;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
+}
 
 /* MAIN Function */
 int main()
@@ -59,10 +68,18 @@ int main()
 		case RIGHT:
 			move(Sptr, n);
 			break;
+		case QUIT:
+			free(Sptr);
+			return 0;
+			break;
+		default:
+			break;
 		}
 		sceneMap(Sptr);
 		scenePrint(Sptr);
 	}
+
+	free(Sptr);
 	return 0;
 }
 
@@ -220,6 +237,19 @@ void scenePrint(scene *Sptr)
 			printf("%1d:", i);
 		for (int j = 0; j < FIELD_SIZE; j++)
 		{
+			switch (Sptr->Coor[i][j])
+			{
+			case '~':
+				setColor(9, 11);
+				break;
+			case 'M':
+				setColor(10, 0);
+				break;
+			default:
+				setColor(15, 0);
+				break;
+			}
+
 			printf("%c ", Sptr->Coor[i][j]);
 		}
 		printf("\n");
@@ -291,5 +321,8 @@ int keyControl()
 	}
 	else if (temp == ' ') { // 스페이스바(공백)이 선택 버튼  
 		return SPACE;
+	}
+	else if (temp == 'q') {
+		return QUIT;
 	}
 }
