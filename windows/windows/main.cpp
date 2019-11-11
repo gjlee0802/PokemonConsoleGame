@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <atlstr.h>	// use Cstring type
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>   //use srand() function
 #include <conio.h>   //for Windows OS
 #include <windows.h>
+
 #define FIELD_SIZE 50
 
 #define UP 0
@@ -48,7 +50,7 @@ void move(scene*, int);
 int isColi(scene*, int, int);
 int keyControl();
 void setColor(int, int);
-void pokemonPrint(char*);
+void pokemonPrint(int);
 void battleInit(scene *);
 void battleMenu(scene *);
 int fightMenu(scene *, int);
@@ -62,7 +64,7 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 1;
+	Sptr->sceneNum = 0;
 
 	Sptr->myPoke[0] = 4;	// 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -119,7 +121,7 @@ void battleInit(scene* Sptr)
 	Sptr->enemyPokeLevel = rand() % 15 + 1;	// 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;	// 상대의 체력은 레벨의 30배로 설정.
 
-	pokemonPrint((char *)"4");	//pokemonPrint(file_name);	//으로 변경 
+	pokemonPrint(4);	//pokemonPrint(Sptr->enemyPoke);	//으로 변경 
 	battleMenu(Sptr);
 }
 
@@ -641,7 +643,7 @@ int isColi(scene* Sptr, int x, int y)
 		srand((unsigned int)time(NULL));
 		int val = 0;
 		val = rand() % 100 + 1;
-		if (val >= 70)
+		if (val <= 45)
 		{
 			battleInit(Sptr);
 		}
@@ -653,11 +655,63 @@ int isColi(scene* Sptr, int x, int y)
 	}
 }
 
-void pokemonPrint(char* name)
+void pokemonPrint(int pokeNum)
 {
+	HANDLE fileSearch;
+	WIN32_FIND_DATA wfd;
+	CString musiccount;
+	CString findFirstFileName;
+	CString findSecondFileName;
+
+	char find_path[10] = "";
+	char found_path[40] = "";
+	
+	find_path[2]=(char)(pokeNum%10 + 48);
+	find_path[1]=(char)((pokeNum/10)%10 + 48);
+	find_path[0]=(char)(pokeNum/100 + 48);
+	//find_path[0] = '0';
+	//find_path[1] = '0';
+	//find_path[2] = '4';
+	find_path[3] = '_';
+	find_path[4] = '*';
+	find_path[5] = '\0';
+
+	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
+	musiccount.Format(_T((const char *)find_path));
+
+	fileSearch = FindFirstFile(musiccount, &wfd);
+	if (fileSearch != INVALID_HANDLE_VALUE)
+	{
+		findFirstFileName.Format(_T("%s"), wfd.cFileName);
+		strcpy(found_path, wfd.cFileName);
+		FindClose(fileSearch);
+		printf("%s!\n", found_path);
+	}
+	
+	char pokemon_name[30];
+	
+	int i=0;
+	while (1)
+	{
+		if (i > 3)
+		{
+			if (found_path[i] == '.')
+			{
+				pokemon_name[i - 4] = '\0';
+				break;
+			}
+			else
+			{
+				pokemon_name[i - 4] = found_path[i];
+			}
+		}
+		i++;
+	}
+	printf("pokemon name : %s\n", pokemon_name);
+
 		char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
-		name_tmp = name;
-		FILE* fp = fopen(name, "rt");
+		name_tmp = found_path;
+		FILE* fp = fopen(name_tmp, "rt");
 		if (fp == NULL) {
 			printf("파일 오픈 실패 !\n");
 		}
@@ -696,6 +750,7 @@ void pokemonPrint(char* name)
 		}
 		fclose(fp);
 		setColor(15, 0);
+		
 }
 
 int keyControl()
