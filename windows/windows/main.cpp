@@ -62,7 +62,7 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 0;
+	Sptr->sceneNum = 1;
 
 	Sptr->myPoke[0] = 4;	// 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
