@@ -1,10 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-<<<<<<< HEAD
-#include <atlstr.h>	// use Cstring type
-=======
 #include <atlstr.h>   // use Cstring type
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>   //use srand() function
@@ -55,17 +51,10 @@ int isColi(scene*, int, int);
 int keyControl();
 void setColor(int, int);
 void pokemonPrint(int);
-<<<<<<< HEAD
-void battleInit(scene *);
-void battleMenu(scene *);
-int fightMenu(scene *, int);
-int useSkill(scene *, int);
-=======
 void battleInit(scene*);
 void battleMenu(scene*);
 int fightMenu(scene*, int);
 int useSkill(scene*, int);
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 
 /* MAIN Function */
 int main()
@@ -132,11 +121,7 @@ void battleInit(scene* Sptr)
 	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 상대의 체력은 레벨의 30배로 설정.
 
-<<<<<<< HEAD
-	pokemonPrint(4);	//pokemonPrint(Sptr->enemyPoke);	//으로 변경 
-=======
 	pokemonPrint(4);   //pokemonPrint(Sptr->enemyPoke);   //으로 변경 
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 	battleMenu(Sptr);
 }
 
@@ -538,7 +523,7 @@ void sceneMap(scene* Sptr)
 				Sptr->Coor[i][j] = 'c';
 
 	}
-			Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		  Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 	}//Switch end
 
 }
@@ -680,17 +665,10 @@ void pokemonPrint(int pokeNum)
 
 	char find_path[10] = "";
 	char found_path[40] = "";
-<<<<<<< HEAD
-	
-	find_path[2]=(char)(pokeNum%10 + 48);
-	find_path[1]=(char)((pokeNum/10)%10 + 48);
-	find_path[0]=(char)(pokeNum/100 + 48);
-=======
 
 	find_path[2] = (char)(pokeNum % 10 + 48);
 	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
 	find_path[0] = (char)(pokeNum / 100 + 48);
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 	//find_path[0] = '0';
 	//find_path[1] = '0';
 	//find_path[2] = '4';
@@ -699,11 +677,7 @@ void pokemonPrint(int pokeNum)
 	find_path[5] = '\0';
 
 	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
-<<<<<<< HEAD
-	musiccount.Format(_T((const char *)find_path));
-=======
 	musiccount.Format(_T((const char*)find_path));
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 
 	fileSearch = FindFirstFile(musiccount, &wfd);
 	if (fileSearch != INVALID_HANDLE_VALUE)
@@ -713,50 +687,15 @@ void pokemonPrint(int pokeNum)
 		FindClose(fileSearch);
 		printf("%s!\n", found_path);
 	}
-<<<<<<< HEAD
-	
-	char pokemon_name[30];
-	
-	int i=0;
-=======
 
 	char pokemon_name[30];
 
 	int i = 0;
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 	while (1)
 	{
 		if (i > 3)
 		{
 			if (found_path[i] == '.')
-<<<<<<< HEAD
-			{
-				pokemon_name[i - 4] = '\0';
-				break;
-			}
-			else
-			{
-				pokemon_name[i - 4] = found_path[i];
-			}
-		}
-		i++;
-	}
-	printf("pokemon name : %s\n", pokemon_name);
-
-		char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
-		name_tmp = found_path;
-		FILE* fp = fopen(name_tmp, "rt");
-		if (fp == NULL) {
-			printf("파일 오픈 실패 !\n");
-		}
-		while (1) {
-			ch = fgetc(fp);
-			if (ch == EOF)
-				break;
-			// 파이리일 경우 문자별 색상 설정
-			switch (ch)
-=======
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 			{
 				pokemon_name[i - 4] = '\0';
 				break;
@@ -807,17 +746,11 @@ void pokemonPrint(int pokeNum)
 		default:
 			setColor(15, 0);
 		}
-<<<<<<< HEAD
-		fclose(fp);
-		setColor(15, 0);
-		
-=======
 		printf("%c", ch);
 	}
 	fclose(fp);
 	setColor(15, 0);
 
->>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
 }
 
 int keyControl()
