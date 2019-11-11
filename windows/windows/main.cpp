@@ -30,31 +30,37 @@
 struct Scene {
 	int sceneNum;
 	char Coor[FIELD_SIZE][FIELD_SIZE];
+	
 	int HeroX;
 	int HeroY;
-	int myPoke[6] = { 0 };   // 갖고 있는 포켓몬의 도감번호
+	int myPokeNum[6] = { 0 };   // 갖고 있는 포켓몬의 도감번호
 	int myPokeLevel[6];   // 갖고 있는 포켓몬의 레벨
 	int myPokeHealth[6];   // 갖고 있는 포켓몬의 체력
-	int currPokemonIndex = 0;   // 가장 먼저 나올 포켓몬 or 현재 배틀중인 포켓몬의 인덱스
-	int enemyPoke;
+	int currPokeIndex = 0;   // 가장 먼저 나올 포켓몬 or 현재 배틀중인 포켓몬의 인덱스
+	char currPokeName[30];
+
+	int enemyPokeNum;
 	int enemyPokeLevel;
 	int enemyPokeHealth;
+	char enemyPokeName[30];
 };
 typedef struct Scene scene;
 
 
 // ** Functions
-void sceneMap(scene*);
-void scenePrint(scene*);
-void move(scene*, int);
-int isColi(scene*, int, int);
-int keyControl();
-void setColor(int, int);
+void pokeNameFind(int, char *);
 void pokemonPrint(int);
 void battleInit(scene*);
 void battleMenu(scene*);
 int fightMenu(scene*, int);
 int useSkill(scene*, int);
+int keyControl();
+void setColor(int, int);
+void sceneMap(scene*);
+void scenePrint(scene*);
+void move(scene*, int);
+int isColi(scene*, int, int);
+
 
 /* MAIN Function */
 int main()
@@ -68,7 +74,7 @@ int main()
 
 	Sptr->sceneNum = 0;
 
-	Sptr->myPoke[0] = 4;   // 향후 연구소에서 지정하도록 설정.
+	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * 30;
 	Sptr->HeroX = 11;
@@ -118,7 +124,7 @@ void battleInit(scene* Sptr)
 	//wildPoke = rand() % 116 + 1;
 	wildPoke = 4;
 	itoa(wildPoke, file_name, 10);
-	Sptr->enemyPoke = wildPoke;
+	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
 	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 상대의 체력은 레벨의 30배로 설정.
@@ -129,7 +135,7 @@ void battleInit(scene* Sptr)
 
 void battleMenu(scene* Sptr)
 {
-	Sptr->currPokemonIndex = 0;
+	Sptr->currPokeIndex = 0;
 	int myturn = 1;   // 0: 나의 턴 , 1: 상대 턴
 	int skillNum = 0;
 	int damage = 0;
@@ -161,22 +167,27 @@ void battleMenu(scene* Sptr)
 			break;
 		}
 
+		pokeNameFind(Sptr->myPokeNum[Sptr->currPokeIndex], Sptr->currPokeName);
+		pokeNameFind(Sptr->enemyPokeNum, Sptr->enemyPokeName);
+
 		if (myturn == true)
 		{
+			// 포켓몬 상태 출력
 			setColor(10,0);
-			printf("\n");
-			printf("상대 포켓몬)) LEVEL: %d | HP: %d\n", Sptr->enemyPokeLevel, Sptr->enemyPokeHealth);
-			for (int h = 0; h < Sptr->enemyPokeHealth / 10; h++)
+			printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
+			printf("상대 포켓몬%s)) LEVEL: %d | HP: %d\n", Sptr->enemyPokeName, Sptr->enemyPokeLevel, Sptr->enemyPokeHealth);
+			for (int h = 0; h < Sptr->enemyPokeHealth / 10; h++)	// HP 바 출력
 			{
 				setColor(9,10);
-				printf("))");
+				printf("]]");
 			} setColor(10, 0); printf("\n");
-			printf("  내 포켓몬)) LEVEL: %d | HP: %d\n", Sptr->myPokeLevel[Sptr->currPokemonIndex], Sptr->myPokeHealth[Sptr->currPokemonIndex]);
-			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokemonIndex] / 10; h++)
+			printf("  내 포켓몬:%s)) LEVEL: %d | HP: %d\n", Sptr->currPokeName, Sptr->myPokeLevel[Sptr->currPokeIndex], Sptr->myPokeHealth[Sptr->currPokeIndex]);
+			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokeIndex] / 10; h++)	// HP 바 출력 
 			{
 				setColor(9, 10);
-				printf("))");
-			} setColor(10, 0); printf("\n");
+				printf("]]");
+			} setColor(10, 0); printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
+			// 선택 메뉴 출력
 			printf(">> 무엇을 할까?\n");
 			setColor(12, 0);
 			printf("============M=E=N=U============>\n");
@@ -205,8 +216,8 @@ void battleMenu(scene* Sptr)
 				damage = useSkill(Sptr, skillNum);
 				Sptr->enemyPokeHealth = Sptr->enemyPokeHealth - damage;
 				setColor(10, 0);
-				printf(">> 상대 포켓몬에게 데미지를 %d만큼 입혔다!\n", damage);
-				Sleep(1000);
+				printf(">> %s가 상대 포켓몬(%s)에게 데미지를 %d만큼 입혔다!\n", Sptr->currPokeName, Sptr->enemyPokeName, damage);
+				Sleep(2000);
 				break;
 			case '2':   //교체한다.
 				break;
@@ -227,10 +238,10 @@ void battleMenu(scene* Sptr)
 			srand((unsigned int)time(NULL));
 			skillNum = fightMenu(Sptr, myturn);
 			damage = useSkill(Sptr, skillNum);
-			Sptr->myPokeHealth[Sptr->currPokemonIndex] = Sptr->myPokeHealth[Sptr->currPokemonIndex] - damage;
+			Sptr->myPokeHealth[Sptr->currPokeIndex] = Sptr->myPokeHealth[Sptr->currPokeIndex] - damage;
 			setColor(10, 0);
-			printf(">> 상대 포켓몬이 공격하여 데미지를 %d만큼 입었다!\n", damage);
-			Sleep(1000);
+			printf(">> 상대 포켓몬(%s)이 공격하여 데미지를 %d만큼 입었다!\n", Sptr->enemyPokeName, damage);
+			Sleep(3000);
 		}
 
 		// 턴 교체
@@ -248,24 +259,23 @@ int fightMenu(scene* Sptr, int myturn)
 	int skillNum = 0;
 	int pokeNum = 0;
 
-	//printf("\n\n\n\n\n\n\n\n\n\n\n");
 	system("cls");
 	if (myturn)
 	{
-		pokeNum = Sptr->myPoke[Sptr->currPokemonIndex]; setColor(10, 0);
+		pokeNum = Sptr->myPokeNum[Sptr->currPokeIndex]; setColor(10, 0);
 		printf(">> 스킬을 선택하세요.(되돌아가려면 1~4를 제외한 키 입력) \n");
 	}
 	else if (!myturn)
 	{
-		pokeNum = Sptr->enemyPoke; setColor(10, 0);
-		printf(">> 상대 차례이다...\n\n");
+		pokeNum = Sptr->enemyPokeNum; setColor(10, 0);
+		printf(">> 상대 포켓몬(%s) 차례이다...\n\n", Sptr->enemyPokeName);
 	}
 
 	char temp;
 	switch (pokeNum)   // 포켓몬 도감번호 
 	{
 	case 1:   // 이상해씨
-		printf("1.몸통박치기 2.덩굴채찍 3.잎날가르기 4. 솔라빔\n\n");
+		printf("1.몸통박치기 2.덩굴채찍 3.잎날가르기 4.솔라빔\n\n");
 		if (myturn)
 			temp = getch();
 		else if (!myturn)
@@ -273,8 +283,8 @@ int fightMenu(scene* Sptr, int myturn)
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
 			setColor(10,0);
-			printf(">> 상대 포켓몬이 (%c)를 선택했다!", temp);
-			Sleep(1000);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!", Sptr->enemyPokeName,temp);
+			Sleep(2000);
 		}
 		switch (temp)
 		{
@@ -303,7 +313,8 @@ int fightMenu(scene* Sptr, int myturn)
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
 			setColor(10,0);
-			printf(">> 상대 포켓몬이 (%c)를 선택했다!\n", temp);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			Sleep(2000);
 		}
 		switch (temp)
 		{
@@ -689,7 +700,7 @@ int isColi(scene* Sptr, int x, int y)
 	}
 }
 
-void pokemonPrint(int pokeNum)
+void pokeNameFind(int pokeNum, char *pokeName)
 {
 	HANDLE fileSearch;
 	WIN32_FIND_DATA wfd;
@@ -703,9 +714,6 @@ void pokemonPrint(int pokeNum)
 	find_path[2] = (char)(pokeNum % 10 + 48);
 	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
 	find_path[0] = (char)(pokeNum / 100 + 48);
-	//find_path[0] = '0';
-	//find_path[1] = '0';
-	//find_path[2] = '4';
 	find_path[3] = '_';
 	find_path[4] = '*';
 	find_path[5] = '\0';
@@ -719,11 +727,8 @@ void pokemonPrint(int pokeNum)
 		findFirstFileName.Format(_T("%s"), wfd.cFileName);
 		strcpy(found_path, wfd.cFileName);
 		FindClose(fileSearch);
-		printf("%s!\n", found_path);
 	}
-
 	char pokemon_name[30];
-
 	int i = 0;
 	while (1)
 	{
@@ -741,7 +746,54 @@ void pokemonPrint(int pokeNum)
 		}
 		i++;
 	}
-	printf("pokemon name : %s\n", pokemon_name);
+	strcpy(pokeName, (const char*)pokemon_name);
+}
+
+void pokemonPrint(int pokeNum)
+{
+	HANDLE fileSearch;
+	WIN32_FIND_DATA wfd;
+	CString musiccount;
+	CString findFirstFileName;
+	CString findSecondFileName;
+	char find_path[10] = "";
+	char found_path[40] = "";
+
+	find_path[2] = (char)(pokeNum % 10 + 48);
+	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+	find_path[0] = (char)(pokeNum / 100 + 48);
+	find_path[3] = '_';
+	find_path[4] = '*';
+	find_path[5] = '\0';
+	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
+	musiccount.Format(_T((const char*)find_path));
+	fileSearch = FindFirstFile(musiccount, &wfd);
+	if (fileSearch != INVALID_HANDLE_VALUE)
+	{
+		findFirstFileName.Format(_T("%s"), wfd.cFileName);
+		strcpy(found_path, wfd.cFileName);
+		FindClose(fileSearch);
+		//printf("%s!\n", found_path);
+	}
+	char pokemon_name[30];
+	int i = 0;
+	while (1)
+	{
+		if (i > 3)
+		{
+			if (found_path[i] == '.')
+			{
+				pokemon_name[i - 4] = '\0';
+				break;
+			}
+			else
+			{
+				pokemon_name[i - 4] = found_path[i];
+			}
+		}
+		i++;
+	}
+	printf("상대 포켓몬 : %s\n", pokemon_name);
 
 	char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
 	name_tmp = found_path;
