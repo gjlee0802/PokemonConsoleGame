@@ -48,12 +48,13 @@ typedef struct Scene scene;
 
 
 // ** Functions
-void pokeNameFind(int, char *);
-void pokemonPrint(int);
+void pokeNameFind(int, char *);	// Param1: pokeNum, Param2: pokeName(추출한 포켓몬 이름이 저장될 문자열 공간의 주소)
+void pokemonPrint(int, int);	// Param1: pokeNum, Param2: onlyHead(머리부분만 출력할 것이면 1 아니면 0)
 void battleInit(scene*);
 void battleMenu(scene*);
 int fightMenu(scene*, int);
-int useSkill(scene*, int);
+void skillPrint(const char *);	// Param1: 파일(경로) 이름
+int useSkill(scene*, int);		// Param2: skillNum
 int keyControl();
 void setColor(int, int);
 void sceneMap(scene*);
@@ -65,7 +66,7 @@ int isColi(scene*, int, int);
 /* MAIN Function */
 int main()
 {
-	//pokemonPrint((char *)"4");   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
+	//pokemonPrint();   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
 
 	system("mode con cols=120 lines=100");
 
@@ -129,7 +130,7 @@ void battleInit(scene* Sptr)
 	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 상대의 체력은 레벨의 30배로 설정.
 
-	pokemonPrint(4);   //pokemonPrint(Sptr->enemyPoke);   //으로 변경 
+	pokemonPrint(4, false);   //pokemonPrint(Sptr->enemyPoke, false);   //으로 변경 
 	battleMenu(Sptr);
 }
 
@@ -162,7 +163,8 @@ void battleMenu(scene* Sptr)
 		if (Sptr->enemyPokeHealth <= 0)
 		{
 			setColor(10, 0);
-			printf(">> 야생 포켓몬이 쓰러졌다!\n");
+			printf(">> 상대 포켓몬이 쓰러졌다!\n");
+			Sleep(2000);
 			//쓰러뜨린 상대 포켓몬의 레벨에 따라 경험치 부여 예정
 			break;
 		}
@@ -276,7 +278,7 @@ int fightMenu(scene* Sptr, int myturn)
 	{
 	case 1:   // 이상해씨
 		printf("1.몸통박치기 2.덩굴채찍 3.잎날가르기 4.솔라빔\n\n");
-		if (myturn)
+		if (myturn)	
 			temp = getch();
 		else if (!myturn)
 		{
@@ -284,6 +286,7 @@ int fightMenu(scene* Sptr, int myturn)
 			temp = (char)(rand() % 4 + 1 + 48);
 			setColor(10,0);
 			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!", Sptr->enemyPokeName,temp);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
 			Sleep(2000);
 		}
 		switch (temp)
@@ -306,7 +309,7 @@ int fightMenu(scene* Sptr, int myturn)
 		break;
 	case 4:   // 파이리
 		printf("1.할퀴기 2.불꽃세례 3.화염방사 4.역린\n\n");
-		if (myturn)
+		if (myturn)	
 			temp = getch();
 		else if (!myturn)
 		{
@@ -314,6 +317,7 @@ int fightMenu(scene* Sptr, int myturn)
 			temp = (char)(rand() % 4 + 1 + 48);
 			setColor(10,0);
 			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
 			Sleep(2000);
 		}
 		switch (temp)
@@ -343,6 +347,25 @@ int fightMenu(scene* Sptr, int myturn)
 	return skillNum;
 }
 
+void skillPrint(const char * path)
+{
+	char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
+	strcpy(name_tmp, path);
+	FILE* fp = fopen(name_tmp, "rt");
+	if (fp == NULL) {
+		printf("파일 오픈 실패 !\n");
+	}
+	while (1) {
+		ch = fgetc(fp);
+		if (ch == EOF)
+			break;
+		printf("%c", ch);
+	}
+	printf("\n");
+	fclose(fp);
+	setColor(15, 0);
+}
+
 int useSkill(scene* Sptr, int skillNum)   // 레벨에 따라 데미지를 리턴한다.
 {
 	int dmg;
@@ -350,33 +373,51 @@ int useSkill(scene* Sptr, int skillNum)   // 레벨에 따라 데미지를 리턴한다.
 	{
 	case 물의파동:
 		dmg = 60;
+		setColor(9,0);
+		skillPrint("water_WhirlPool.txt");
 		break;
 	case 역린:
 		dmg = 120;
+		setColor(12,0);
+		skillPrint("fire_Sacred_Fire.txt");
 		break;
 	case 솔라빔:
 		dmg = 120;
 		break;
 	case 잎날가르기:
 		dmg = 55;
+		setColor(10,0);
+		skillPrint("attck_hit_Grass.txt");
 		break;
 	case 거품광선:
 		dmg = 65;
+		setColor(9,0);
+		skillPrint("water_Water_Pledge.txt");
 		break;
 	case 화염방사:
 		dmg = 90;
+		setColor(12,0);
+		skillPrint("attack_hit_Fire_3.txt");
 		break;
 	case 불꽃세례:
 		dmg = 40;
+		setColor(12,0);
+		skillPrint("fire_Ember.txt");
 		break;
 	case 몸통박치기:
 		dmg = 50;
+		setColor(8, 0);
+		skillPrint("attack_hit_Normal.txt");
 		break;
 	case 덩굴채찍:
 		dmg = 45;
+		setColor(10,0);
+		skillPrint("attack_hit_Grass_1.txt");
 		break;
 	case 할퀴기:
 		dmg = 40;
+		setColor(8, 0);
+		skillPrint("attack_hit_Normal.txt");
 		break;
 	default:
 		dmg = 0;
@@ -708,16 +749,16 @@ void pokeNameFind(int pokeNum, char *pokeName)
 	CString findFirstFileName;
 	CString findSecondFileName;
 
-	char find_path[10] = "";
+	char find_path[20] = "";
 	char found_path[40] = "";
-
-	find_path[2] = (char)(pokeNum % 10 + 48);
-	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+	
 	find_path[0] = (char)(pokeNum / 100 + 48);
+	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+	find_path[2] = (char)(pokeNum % 10 + 48);
 	find_path[3] = '_';
 	find_path[4] = '*';
 	find_path[5] = '\0';
-
+	
 	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
 	musiccount.Format(_T((const char*)find_path));
 
@@ -749,22 +790,31 @@ void pokeNameFind(int pokeNum, char *pokeName)
 	strcpy(pokeName, (const char*)pokemon_name);
 }
 
-void pokemonPrint(int pokeNum)
+void pokemonPrint(int pokeNum, int onlyHead)
 {
 	HANDLE fileSearch;
 	WIN32_FIND_DATA wfd;
 	CString musiccount;
 	CString findFirstFileName;
 	CString findSecondFileName;
-	char find_path[10] = "";
+	char find_path[20] = "";
 	char found_path[40] = "";
 
-	find_path[2] = (char)(pokeNum % 10 + 48);
-	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
 	find_path[0] = (char)(pokeNum / 100 + 48);
+	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+	find_path[2] = (char)(pokeNum % 10 + 48);
 	find_path[3] = '_';
 	find_path[4] = '*';
-	find_path[5] = '\0';
+	if (onlyHead == false)
+	{
+		find_path[5] = '\0';
+	}
+	else if (onlyHead == true)
+	{
+		find_path[5] = '_'; find_path[6] = 'F'; find_path[7] = 'a'; find_path[8] = 'c'; find_path[9] = 'e';
+		find_path[10] = '*'; find_path[11] = '\0';
+	}
+
 	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
 	musiccount.Format(_T((const char*)find_path));
 	fileSearch = FindFirstFile(musiccount, &wfd);
@@ -781,7 +831,7 @@ void pokemonPrint(int pokeNum)
 	{
 		if (i > 3)
 		{
-			if (found_path[i] == '.')
+			if (found_path[i] == '.'|| found_path[i] == '_')
 			{
 				pokemon_name[i - 4] = '\0';
 				break;
@@ -793,7 +843,7 @@ void pokemonPrint(int pokeNum)
 		}
 		i++;
 	}
-	printf("상대 포켓몬 : %s\n", pokemon_name);
+	printf("pokemon_name : %s\n", pokemon_name);
 
 	char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
 	name_tmp = found_path;
@@ -805,39 +855,52 @@ void pokemonPrint(int pokeNum)
 		ch = fgetc(fp);
 		if (ch == EOF)
 			break;
-		// 파이리일 경우 문자별 색상 설정
-		switch (pokeNum)
+		
+		if(onlyHead==false)					// 전체를 출력할 경우(머리X)
 		{
-		case 4:
-			switch (ch)
+			switch (pokeNum)	// 파이리
 			{
-			case '.':
-				setColor(15, 15);
+			case 4:
+				switch (ch)
+				{
+				case '.':
+					setColor(15, 15);
+					break;
+				case '@':
+					setColor(0, 0);
+					break;
+				case '%':
+					setColor(2, 2);
+					break;
+				case '?':
+					setColor(4, 4);
+					break;
+				case '*':
+					setColor(4, 4);
+					break;
+				case ',':
+					setColor(14, 14);
+					break;
+				case '+':
+					setColor(12, 12);
+					break;
+				default:
+					setColor(15, 0);
+				}
+			}
+		}
+		else if (onlyHead == true)
+		{
+			switch (pokeNum)
+			{
+			case 4:
+				setColor(12, 0);
 				break;
-			case '@':
-				setColor(0, 0);
-				break;
-			case '%':
-				setColor(2, 2);
-				break;
-			case '?':
-				setColor(4, 4);
-				break;
-			case '*':
-				setColor(4, 4);
-				break;
-			case ',':
-				setColor(14, 14);
-				break;
-			case '+':
-				setColor(12, 12);
-				break;
-			default:
-				setColor(15, 0);
 			}
 		}
 		printf("%c", ch);
 	}
+	printf("\n");
 	fclose(fp);
 	setColor(15, 0);
 
