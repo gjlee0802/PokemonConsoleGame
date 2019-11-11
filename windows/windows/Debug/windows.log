@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  main.cpp
 C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(118,1): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(1323): message : 'itoa' 선언을 참조하십시오.
@@ -13,3 +14,6 @@ C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(758,1): w
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
 C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(777): warning C4715: 'keyControl': 모든 제어 경로에서 값을 반환하지는 않습니다.
   windows.vcxproj -> C:\Users\이경주\Desktop\PokemonConsoleGame\windows\Debug\windows.exe
+=======
+﻿  windows.vcxproj -> C:\Users\user\Desktop\univ\1-2\programming\pokemon\PokemonConsoleGame\windows\Debug\windows.exe
+>>>>>>> 47ff9b6a9ba387dc0a3ff1025074657c632c2829
