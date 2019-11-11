@@ -61,6 +61,8 @@ int main()
 {
 	//pokemonPrint((char *)"4");   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
 
+	system("mode con cols=120 lines=100");
+
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
@@ -143,14 +145,17 @@ void battleMenu(scene* Sptr)
 		}
 		if (deadPoke == 6)
 		{
-			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			printf("정신을 잃었다... 게임을 종료한다..\n");
+			system("cls");
+			setColor(10, 0);
+			printf(">> 정신을 잃었다... 게임을 종료한다..\n");
 			printf("<<<<<  GAME OVER!!  >>>>>\n");
+			Sleep(3000);
 			//free(Sptr);
 			break;
 		}
 		if (Sptr->enemyPokeHealth <= 0)
 		{
+			setColor(10, 0);
 			printf(">> 야생 포켓몬이 쓰러졌다!\n");
 			//쓰러뜨린 상대 포켓몬의 레벨에 따라 경험치 부여 예정
 			break;
@@ -158,38 +163,60 @@ void battleMenu(scene* Sptr)
 
 		if (myturn == true)
 		{
-			printf("\n\n\n\n\n\n\n\n\n\n\n");
+			setColor(10,0);
+			printf("\n");
 			printf("상대 포켓몬)) LEVEL: %d | HP: %d\n", Sptr->enemyPokeLevel, Sptr->enemyPokeHealth);
+			for (int h = 0; h < Sptr->enemyPokeHealth / 10; h++)
+			{
+				setColor(9,10);
+				printf("))");
+			} setColor(10, 0); printf("\n");
 			printf("  내 포켓몬)) LEVEL: %d | HP: %d\n", Sptr->myPokeLevel[Sptr->currPokemonIndex], Sptr->myPokeHealth[Sptr->currPokemonIndex]);
+			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokemonIndex] / 10; h++)
+			{
+				setColor(9, 10);
+				printf("))");
+			} setColor(10, 0); printf("\n");
 			printf(">> 무엇을 할까?\n");
-			printf("-----------------------------\n");
-			printf("| (1)싸운다     (2)교체한다  |\n");
-			printf("| (3)몬스터볼   (4)도망간다  |\n");
-			printf("-----------------------------\n");
+			setColor(12, 0);
+			printf("============M=E=N=U============>\n");
+			setColor(14, 0);
+			printf("O---------------------------===>\n");
+			printf("| (1)싸운다     (2)교체한다   ==>\n");
+			printf("| (3)몬스터볼   (4)도망간다   ==>\n");
+			printf("L---------------------------===>\n");
+			setColor(15, 0);
 			char temp = getch();
 			skillNum = 0;
 			damage = 0;
 			switch (temp)
 			{
 			case '1':   //싸운다.
+				system("cls");
 				while (skillNum <= 0)
 				{
 					skillNum = fightMenu(Sptr, myturn);
 					if (skillNum <= 0)
 					{
+						setColor(10,0);
 						printf(">> 메뉴로 돌아갑니다.\n"); break;
 					}
 				}
 				damage = useSkill(Sptr, skillNum);
 				Sptr->enemyPokeHealth = Sptr->enemyPokeHealth - damage;
+				setColor(10, 0);
 				printf(">> 상대 포켓몬에게 데미지를 %d만큼 입혔다!\n", damage);
+				Sleep(1000);
 				break;
 			case '2':   //교체한다.
 				break;
 			case '4':   //도망간다.
+				setColor(10,0);
 				printf(">> 도망쳤다.!\n");
+				Sleep(1000);
 				return;
 			default:
+				setColor(10,0);
 				printf(">> 그러한 선택지가 없습니다.\n");
 			}
 		}
@@ -201,7 +228,9 @@ void battleMenu(scene* Sptr)
 			skillNum = fightMenu(Sptr, myturn);
 			damage = useSkill(Sptr, skillNum);
 			Sptr->myPokeHealth[Sptr->currPokemonIndex] = Sptr->myPokeHealth[Sptr->currPokemonIndex] - damage;
+			setColor(10, 0);
 			printf(">> 상대 포켓몬이 공격하여 데미지를 %d만큼 입었다!\n", damage);
+			Sleep(1000);
 		}
 
 		// 턴 교체
@@ -210,6 +239,7 @@ void battleMenu(scene* Sptr)
 		else if (!myturn)
 			myturn++;
 	}
+	setColor(10,0);
 	printf(">> 배틀 메뉴 종료. 맵으로 돌아갑니다.\n");
 }
 
@@ -218,16 +248,17 @@ int fightMenu(scene* Sptr, int myturn)
 	int skillNum = 0;
 	int pokeNum = 0;
 
-	printf("\n\n\n\n\n\n\n\n\n\n\n");
+	//printf("\n\n\n\n\n\n\n\n\n\n\n");
+	system("cls");
 	if (myturn)
 	{
-		pokeNum = Sptr->myPoke[Sptr->currPokemonIndex];
+		pokeNum = Sptr->myPoke[Sptr->currPokemonIndex]; setColor(10, 0);
 		printf(">> 스킬을 선택하세요.(되돌아가려면 1~4를 제외한 키 입력) \n");
 	}
 	else if (!myturn)
 	{
-		pokeNum = Sptr->enemyPoke;
-		printf(">> 상대 차례이다...\n");
+		pokeNum = Sptr->enemyPoke; setColor(10, 0);
+		printf(">> 상대 차례이다...\n\n");
 	}
 
 	char temp;
@@ -241,7 +272,9 @@ int fightMenu(scene* Sptr, int myturn)
 		{
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10,0);
 			printf(">> 상대 포켓몬이 (%c)를 선택했다!", temp);
+			Sleep(1000);
 		}
 		switch (temp)
 		{
@@ -269,6 +302,7 @@ int fightMenu(scene* Sptr, int myturn)
 		{
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10,0);
 			printf(">> 상대 포켓몬이 (%c)를 선택했다!\n", temp);
 		}
 		switch (temp)
@@ -531,7 +565,7 @@ void sceneMap(scene* Sptr)
 
 void scenePrint(scene* Sptr)
 {
-
+	system("cls");
 	int i = 0;
 	printf("   ");
 	for (i = 0; i < FIELD_SIZE; i++)
@@ -720,31 +754,35 @@ void pokemonPrint(int pokeNum)
 		if (ch == EOF)
 			break;
 		// 파이리일 경우 문자별 색상 설정
-		switch (ch)
+		switch (pokeNum)
 		{
-		case '.':
-			setColor(15, 15);
-			break;
-		case '@':
-			setColor(0, 0);
-			break;
-		case '%':
-			setColor(2, 2);
-			break;
-		case '?':
-			setColor(4, 4);
-			break;
-		case '*':
-			setColor(4, 4);
-			break;
-		case ',':
-			setColor(14, 14);
-			break;
-		case '+':
-			setColor(12, 12);
-			break;
-		default:
-			setColor(15, 0);
+		case 4:
+			switch (ch)
+			{
+			case '.':
+				setColor(15, 15);
+				break;
+			case '@':
+				setColor(0, 0);
+				break;
+			case '%':
+				setColor(2, 2);
+				break;
+			case '?':
+				setColor(4, 4);
+				break;
+			case '*':
+				setColor(4, 4);
+				break;
+			case ',':
+				setColor(14, 14);
+				break;
+			case '+':
+				setColor(12, 12);
+				break;
+			default:
+				setColor(15, 0);
+			}
 		}
 		printf("%c", ch);
 	}
