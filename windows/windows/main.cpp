@@ -75,7 +75,7 @@ int main()
 
 	Sptr->sceneNum = 0;
 
-	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
+	Sptr->myPokeNum[0] = 7;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * 30;
 	Sptr->HeroX = 11;
@@ -123,14 +123,14 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 4;
+	wildPoke = 7;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
 	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 상대의 체력은 레벨의 30배로 설정.
 
-	pokemonPrint(4, false);   //pokemonPrint(Sptr->enemyPoke, false);   //으로 변경 
+	pokemonPrint(7, false);   //pokemonPrint(Sptr->enemyPoke, false);   //으로 변경 
 	battleMenu(Sptr);
 }
 
@@ -886,6 +886,29 @@ void pokemonPrint(int pokeNum, int onlyHead)
 					break;
 				default:
 					setColor(15, 0);
+				}
+			case 7:  //꼬부기
+				switch (ch)
+				{
+				case '@':
+				case '&':
+					setColor(0, 0);
+					break;
+				case '/':
+					setColor(3, 4);
+					break;
+				case '+':
+					setColor(9, 9);
+					break;
+				case '*':
+					setColor(11, 11);
+					break;
+				case ':':
+					setColor(11, 14);
+					break;
+
+				default:
+					setColor(0, 15);
 				}
 			}
 		}
