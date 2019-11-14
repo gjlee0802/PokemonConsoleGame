@@ -68,14 +68,14 @@ int main()
 {
 	//pokemonPrint();   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
 
-	system("mode con cols=120 lines=100");
+	system("mode con cols=120 lines=120");
 
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
 	Sptr->sceneNum = 0;
 
-	Sptr->myPokeNum[0] = 7;   // 향후 연구소에서 지정하도록 설정.
+	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * 30;
 	Sptr->HeroX = 11;
@@ -129,8 +129,7 @@ void battleInit(scene* Sptr)
 	srand((unsigned int)time(NULL));
 	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 상대의 체력은 레벨의 30배로 설정.
-
-	pokemonPrint(7, false);   //pokemonPrint(Sptr->enemyPoke, false);   //으로 변경 
+	pokemonPrint(Sptr->enemyPokeNum, false); 
 	battleMenu(Sptr);
 }
 
@@ -340,6 +339,38 @@ int fightMenu(scene* Sptr, int myturn)
 		}
 		break;
 	case 7:   // 꼬부기
+		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		if (myturn)
+			temp = getch();
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 물의파동;
+			break;
+		case '3':
+			skillNum = 거품광선;
+			break;
+		case '4':
+			skillNum = 몸통박치기;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
+		break;
 		break;
 	case 10: // 캐터피
 		break;
@@ -858,7 +889,7 @@ void pokemonPrint(int pokeNum, int onlyHead)
 		
 		if(onlyHead==false)					// 전체를 출력할 경우(머리X)
 		{
-			switch (pokeNum)	// 파이리
+			switch (pokeNum)
 			{
 			case 4:
 				switch (ch)
@@ -886,11 +917,15 @@ void pokemonPrint(int pokeNum, int onlyHead)
 					break;
 				default:
 					setColor(15, 0);
+					break;
 				}
+				break;
 			case 7:  //꼬부기
 				switch (ch)
 				{
 				case '@':
+					setColor(0, 0);
+					break;
 				case '&':
 					setColor(0, 0);
 					break;
@@ -906,10 +941,13 @@ void pokemonPrint(int pokeNum, int onlyHead)
 				case ':':
 					setColor(11, 14);
 					break;
-
 				default:
-					setColor(0, 15);
+					setColor(15, 0);
+					break;
 				}
+				break;
+			default:
+				setColor(15,0);
 			}
 		}
 		else if (onlyHead == true)
@@ -919,6 +957,10 @@ void pokemonPrint(int pokeNum, int onlyHead)
 			case 4:
 				setColor(12, 0);
 				break;
+
+			case 7:
+				setColor(9, 0);
+				break;
 			}
 		}
 		printf("%c", ch);
@@ -926,7 +968,6 @@ void pokemonPrint(int pokeNum, int onlyHead)
 	printf("\n");
 	fclose(fp);
 	setColor(15, 0);
-
 }
 
 int keyControl()
