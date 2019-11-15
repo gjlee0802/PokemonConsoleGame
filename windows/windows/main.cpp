@@ -7,7 +7,7 @@
 #include <conio.h>   //for Windows OS
 #include <windows.h>
 
-#define LAB_VERTICAL_FIELD_SIZE 20
+#define LAB_VERTICAL_FIELD_SIZE 21
 #define FIELD_SIZE 50
 
 #define UP 0
@@ -29,7 +29,7 @@
 #define 할퀴기 10
 
 struct Scene {
-	int sceneNum;
+	int sceneNum;			// == 맵의 번호
 	char Coor[FIELD_SIZE][FIELD_SIZE];
 	
 	int HeroX;
@@ -56,12 +56,14 @@ void battleMenu(scene*);
 int fightMenu(scene*, int);
 void skillPrint(const char *);	// Param1: 파일(경로) 이름
 int useSkill(scene*, int);		// Param2: skillNum
-int keyControl();
-void setColor(int, int);
+void checkEvent(scene *);
+void teleportMap(scene *, int, int);	// Param 2: 이동하기 전의 sceneNum, Param 3: 이동할 sceneNum
 void sceneMap(scene*);
 void scenePrint(scene*);
 void move(scene*, int);
 int isColi(scene*, int, int);
+int keyControl();
+void setColor(int, int);
 
 
 /* MAIN Function */
@@ -102,6 +104,9 @@ int main()
 			break;
 		case RIGHT:
 			move(Sptr, n);
+			break;
+		case SPACE:
+			checkEvent(Sptr);
 			break;
 		case QUIT:
 			free(Sptr);
@@ -458,6 +463,52 @@ int useSkill(scene* Sptr, int skillNum)   // 레벨에 따라 데미지를 리턴한다.
 
 }
 
+void checkEvent(scene* Sptr)	// This function would be executed when SPACE key pushed.
+{
+	switch (Sptr->sceneNum)
+	{
+	case 0:	// 마을0
+		// Check entrance
+		if (Sptr->HeroX == 30 && Sptr->HeroY == 24)
+			teleportMap(Sptr, 0, 1);
+		break;
+	case 1:	// 연구소
+		// Check entrance
+		if ((Sptr->HeroX == 24 && Sptr->HeroY == 19)||
+			(Sptr->HeroX == 23 && Sptr->HeroY == 19))
+			teleportMap(Sptr, 1, 0);
+		
+		// Talk with Professor
+		if (((24 - Sptr->HeroX == -1 || 24 - Sptr->HeroX == 1) && Sptr->HeroY == 8) ||
+			((8 - Sptr->HeroY == -1 || 8 - Sptr->HeroY == 1) && Sptr->HeroX == 24))
+		{
+			printf("안녕! 난 오박사란다. \n");
+			getch();
+			printf("너 포켓몬이 없구나. 포켓몬을 키워보겠니?\n");
+			getch();
+			printf("옆에 있는 포켓몬 세마리 중 하나를 고르렴.\n");
+			getch();
+		}
+		break;
+	}
+}
+
+void teleportMap(scene* Sptr, int sceneNum0, int sceneNum1)
+{
+	if (sceneNum0 == 0 && sceneNum1 == 1)
+	{
+		Sptr->HeroX = 24;
+		Sptr->HeroY = 18;
+		Sptr->sceneNum = 1;
+	}
+	else if (sceneNum0 == 1 && sceneNum1 == 0)
+	{
+		Sptr->HeroX = 30;
+		Sptr->HeroY = 24;
+		Sptr->sceneNum = 0;
+	}
+}
+
 /* Draw/Print Functions */
 void sceneMap(scene* Sptr)
 {
@@ -505,13 +556,13 @@ void sceneMap(scene* Sptr)
 			Sptr->Coor[34][j] = '=';
 		for (i = 32; i <= 34; i++)
 			Sptr->Coor[i][41] = '=';
-		for (j = 42; j <= 48; j++)
+		for (j = 42; j < FIELD_SIZE-1; j++)
 			Sptr->Coor[32][j] = '=';
 
-		for (j = 1; j < 49; j++)
+		for (j = 1; j < FIELD_SIZE-1; j++)
 		{
 			int water_cnt = 0;
-			for (i = 31; i < 49; i++)
+			for (i = 31; i < FIELD_SIZE-1; i++)
 				if (Sptr->Coor[i][j] == '=')
 				{
 					++water_cnt;
@@ -584,10 +635,10 @@ void sceneMap(scene* Sptr)
 
 	case 1: {
 		//Edge
-		for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
+		for (i = 0; i < FIELD_SIZE; i++)
 			for (j = 0; j < FIELD_SIZE; j++)
 				Sptr->Coor[i][j] = '^';
-		for (i = 1; i < LAB_VERTICAL_FIELD_SIZE - 1; i++)
+		for (i = 1; i < LAB_VERTICAL_FIELD_SIZE - 2; i++)
 			for (j = 1; j < FIELD_SIZE - 1; j++)
 				Sptr->Coor[i][j] = ' ';
 
@@ -683,6 +734,15 @@ void scenePrint(scene* Sptr)
 				case 'M':
 					setColor(0, 10);
 					break;
+				case '^':
+					setColor(2, 15);
+					break;
+				case '/':
+					setColor(6, 0);
+					break;
+				case '\\':
+					setColor(6, 0);
+					break;
 				default:
 					setColor(15, 0);
 					break;
@@ -691,6 +751,7 @@ void scenePrint(scene* Sptr)
 				printf("%c ", Sptr->Coor[i][j]);
 			}
 			printf("\n");
+			setColor(15, 0);
 		}
 	}
 	else if(Sptr->sceneNum == 1) {
@@ -739,6 +800,9 @@ void scenePrint(scene* Sptr)
 					case 'A':
 						setColor(2, 2);
 						break;
+					case '^':
+						setColor(7,7);
+						break;
 					default:
 						setColor(15, 0);
 						break;
@@ -747,6 +811,7 @@ void scenePrint(scene* Sptr)
 					printf("%c ", Sptr->Coor[i][j]);
 				}
 				printf("\n");
+				setColor(15,0);
 			}
 		
 	}
@@ -798,7 +863,8 @@ int isColi(scene* Sptr, int x, int y)
 		Sptr->Coor[y][x] == 'b' ||
 		Sptr->Coor[y][x] == 'p' ||
 		Sptr->Coor[y][x] == 'm' ||
-		Sptr->Coor[y][x] == 'c'
+		Sptr->Coor[y][x] == 'c' ||
+		Sptr->Coor[y][x] == 'P'	// Professor
 		)
 	{
 		return 1;
