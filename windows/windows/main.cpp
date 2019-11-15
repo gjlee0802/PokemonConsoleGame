@@ -7,6 +7,7 @@
 #include <conio.h>   //for Windows OS
 #include <windows.h>
 
+#define LAB_VERTICAL_FIELD_SIZE 20
 #define FIELD_SIZE 50
 
 #define UP 0
@@ -583,16 +584,16 @@ void sceneMap(scene* Sptr)
 
 	case 1: {
 		//Edge
-		for (i = 0; i < FIELD_SIZE; i++)
+		for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
 			for (j = 0; j < FIELD_SIZE; j++)
 				Sptr->Coor[i][j] = '^';
-		for (i = 1; i < FIELD_SIZE - 1; i++)
+		for (i = 1; i < LAB_VERTICAL_FIELD_SIZE - 1; i++)
 			for (j = 1; j < FIELD_SIZE - 1; j++)
 				Sptr->Coor[i][j] = ' ';
 
 		//Door open
-		Sptr->Coor[49][24] = ' ';
-		Sptr->Coor[49][23] = ' ';
+		Sptr->Coor[19][24] = ' ';
+		Sptr->Coor[19][23] = ' ';
 
 		//Professor
 		Sptr->Coor[8][24] = 'P';
@@ -613,31 +614,37 @@ void sceneMap(scene* Sptr)
 		}
 
 		//Machine1
-		Sptr->Coor[2][4] = 'm';
-		Sptr->Coor[2][5] = 'm';
+		Sptr->Coor[1][4] = 'm';
+		Sptr->Coor[1][5] = 'm';
 		for (j = 3; j <= 6; j++)
-			Sptr->Coor[3][j] = 'm';
-		for (i = 4; i <= 6; i++)
+			Sptr->Coor[2][j] = 'm';
+		for (i = 3; i <= 5; i++)
 			for (j = 3; j <= 6; j++)
 				Sptr->Coor[i][j] = 'c';
 
 		//Machine2
-		Sptr->Coor[8][4] = 'm';
-		Sptr->Coor[8][5] = 'm';
+		Sptr->Coor[7][4] = 'm';
+		Sptr->Coor[7][5] = 'm';
 		for (i = 3; i <= 6; i++)
-			Sptr->Coor[9][i] = 'm';
-		for (i = 10; i <= 12; i++)
+			Sptr->Coor[8][i] = 'm';
+		for (i = 9; i <= 11; i++)
 			for (j = 3; j <= 6; j++)
 				Sptr->Coor[i][j] = 'c';
 
 		//Machine3
-		Sptr->Coor[14][4] = 'm';
-		Sptr->Coor[14][5] = 'm';
+		Sptr->Coor[13][4] = 'm';
+		Sptr->Coor[13][5] = 'm';
 		for (i = 3; i <= 6; i++)
-			Sptr->Coor[15][i] = 'm';
-		for (i = 16; i <= 18; i++)
+			Sptr->Coor[14][i] = 'm';
+		for (i = 15; i <= 17; i++)
 			for (j = 3; j <= 6; j++)
 				Sptr->Coor[i][j] = 'c';
+
+		//book
+		for (int i = 1; i <= 3; i++) {
+			for (int j = 35; j <= 45; j++)
+				Sptr->Coor[i][j] = 'E';
+		}
 
 	}
 		  Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
@@ -648,59 +655,100 @@ void sceneMap(scene* Sptr)
 
 void scenePrint(scene* Sptr)
 {
-	system("cls");
-	int i = 0;
-	printf("   ");
-	for (i = 0; i < FIELD_SIZE; i++)
-	{
-		if (i < 9)
-			printf("%d ", i);
-		else
-			printf("%d", i);
-	}
-	printf("\n");
-	for (i = 0; i < FIELD_SIZE; i++)
-	{
-		if (i <= 9)
-			printf("%1d: ", i);
-		else
-			printf("%1d:", i);
-		for (int j = 0; j < FIELD_SIZE; j++)
+	if (Sptr->sceneNum == 0) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < FIELD_SIZE; i++)
 		{
-			switch (Sptr->Coor[i][j])
-			{
-			case '~':
-				setColor(9, 11);
-				break;
-			case 'M':
-				setColor(0, 10);
-				break;
-			case 'T':
-				setColor(14, 14);
-				break;
-			case '|':
-				setColor(14, 0);
-				break;
-			case 'b':
-				setColor(4, 4);
-				break;
-			case 'p':
-				setColor(15, 15);
-				break;
-			case 'm':
-				setColor(67, 67);
-				break;
-			case 'c':
-				setColor(23, 23);
-				break;
-			default:
-				setColor(15, 0);
-				break;
-			}
-
-			printf("%c ", Sptr->Coor[i][j]);
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
 		}
 		printf("\n");
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < FIELD_SIZE; j++)
+			{
+				switch (Sptr->Coor[i][j])
+				{
+				case '~':
+					setColor(9, 11);
+					break;
+				case 'M':
+					setColor(0, 10);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
+			}
+			printf("\n");
+		}
+	}
+	else if(Sptr->sceneNum == 1) {
+			system("cls");
+			int i = 0;
+			printf("   ");
+			for (i = 0; i < FIELD_SIZE; i++)
+			{
+				if (i < 9)
+					printf("%d ", i);
+				else
+					printf("%d", i);
+			}
+			printf("\n");
+			for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
+			{
+				if (i <= 9)
+					printf("%1d: ", i);
+				else
+					printf("%1d:", i);
+				for (int j = 0; j < FIELD_SIZE; j++)
+				{
+					switch (Sptr->Coor[i][j])
+					{
+					case 'T':
+						setColor(14, 14);
+						break;
+					case '|':
+						setColor(14, 0);
+						break;
+					case 'b':
+						setColor(4, 4);
+						break;
+					case 'p':
+						setColor(15, 15);
+						break;
+					case 'm':
+						setColor(1,1);
+						break;
+					case 'c':
+						setColor(23, 23);
+						break;
+					case 'E':
+						setColor(0,8);
+						break;
+					case 'A':
+						setColor(2, 2);
+						break;
+					default:
+						setColor(15, 0);
+						break;
+					}
+
+					printf("%c ", Sptr->Coor[i][j]);
+				}
+				printf("\n");
+			}
+		
 	}
 }
 
