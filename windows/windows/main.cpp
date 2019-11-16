@@ -37,6 +37,9 @@ struct Scene {
 	int myPokeNum[6] = { 0 };   // 갖고 있는 포켓몬의 도감번호
 	int myPokeLevel[6];   // 갖고 있는 포켓몬의 레벨
 	int myPokeHealth[6];   // 갖고 있는 포켓몬의 체력
+	int myPokeExp[6];		//갖고 있는 포켓몬의 경험치
+	int LevelUpExp[6];		//레벨업 위해 얻어야 할 경험치
+	int leftedExp[6];		//레벨업하고 남은 경험치 버퍼
 	int currPokeIndex = 0;   // 가장 먼저 나올 포켓몬 or 현재 배틀중인 포켓몬의 인덱스
 	char currPokeName[30];
 
@@ -81,6 +84,8 @@ int main()
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * 30;
+	Sptr->myPokeExp[0] = 0;
+	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 	Sptr->HeroX = 11;
 	Sptr->HeroY = 12;
 	/*Sptr->HeroX = 8;
@@ -169,8 +174,23 @@ void battleMenu(scene* Sptr)
 		{
 			setColor(10, 0);
 			printf(">> 상대 포켓몬이 쓰러졌다!\n");
+			Sleep(1500);
+			Sptr->myPokeExp[0] = Sptr->myPokeExp[0] + (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel);
+			//얻는 경험치는 상대포켓몬 레벨**3으로 설정
+			printf(">> 경험치가 %d만큼 증가했다!\n", (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel));
+			Sleep(1500);
+			if (Sptr->myPokeExp[0] >= Sptr->LevelUpExp[0]) {
+				while (Sptr->myPokeExp[0] >= Sptr->LevelUpExp[0]){
+					Sptr->myPokeExp[0] = Sptr->myPokeExp[0] - Sptr->LevelUpExp[0];
+					Sptr->myPokeLevel[0] += 1;
+					Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
+					printf(">> 레벨이 1 증가했다!\n");
+					Sleep(1500);
+				}
+			}
+			printf(">> 레벨이 %d(이)가 되었다!\n", Sptr->myPokeLevel[0]);
 			Sleep(2000);
-			//쓰러뜨린 상대 포켓몬의 레벨에 따라 경험치 부여 예정
+			
 			break;
 		}
 
@@ -188,12 +208,13 @@ void battleMenu(scene* Sptr)
 				setColor(9,10);
 				printf("]]");
 			} setColor(10, 0); printf("\n");
-			printf("  내 포켓몬:%s)) LEVEL: %d | HP: %d\n", Sptr->currPokeName, Sptr->myPokeLevel[Sptr->currPokeIndex], Sptr->myPokeHealth[Sptr->currPokeIndex]);
+			printf("  내 포켓몬:%s)) LEVEL: %d | HP: %d | EXP : %d/%d\n", Sptr->currPokeName, Sptr->myPokeLevel[Sptr->currPokeIndex], Sptr->myPokeHealth[Sptr->currPokeIndex], Sptr->myPokeExp[Sptr->currPokeIndex], Sptr->LevelUpExp[Sptr->currPokeIndex]);
 			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokeIndex] / 10; h++)	// HP 바 출력 
 			{
 				setColor(9, 10);
 				printf("]]");
-			} setColor(10, 0); printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
+			}
+			setColor(10, 0); printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
 			// 선택 메뉴 출력
 			printf(">> 무엇을 할까?\n");
 			setColor(12, 0);
