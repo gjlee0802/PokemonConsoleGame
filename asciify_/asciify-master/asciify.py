@@ -83,9 +83,9 @@ method main():
 if __name__ == '__main__':
     import sys
     import urllib.request
-    if sys.argv[1].startswith('http://') or sys.argv[1].startswith('https://'):
-        urllib.request.urlretrieve(sys.argv[1], "asciify.jpg")
-        path = "asciify.jpg"
+    if sys.argv[1].startswith('C:\Users\김성호\Desktop\PokemonConsoleGame\asciify_\asciify-master') or sys.argv[1].startswith('C:\Users\김성호\Desktop\PokemonConsoleGame\asciify_\asciify-master'):
+        urllib.request.urlretrieve(sys.argv[1], "octocat.png")
+        path = "octocat.png"
     else:
         path = sys.argv[1]
     runner(path)

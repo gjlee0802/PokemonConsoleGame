@@ -137,7 +137,7 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 7;
+	wildPoke = 1;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
@@ -1029,6 +1029,29 @@ void pokemonPrint(int pokeNum, int onlyHead)
 		{
 			switch (pokeNum)
 			{
+			case 1:  //ÀÌ»óÇØ¾¾
+				switch (ch)
+				{
+				case '@':case '#':case '%':case ',':case ';':case ':':
+					setColor(0, 0);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case 'S':case '?':
+					setColor(2, 2);
+					break;
+				case '+':
+					setColor(11, 11);
+					break;
+				case '*':
+					setColor(10, 10);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
 			case 4:
 				switch (ch)
 				{
@@ -1061,24 +1084,37 @@ void pokemonPrint(int pokeNum, int onlyHead)
 			case 7:  //²¿ºÎ±â
 				switch (ch)
 				{
-				case '@':
+				case '@':case '?':case '#':case '%':
 					setColor(0, 0);
 					break;
-				case '&':
-					setColor(0, 0);
-					break;
-				case '/':
-					setColor(3, 4);
-					break;
-				case '+':
-					setColor(9, 9);
-					break;
-				case '*':
+				case ';':case ':':
 					setColor(11, 11);
 					break;
-				case ':':
-					setColor(11, 14);
+				case '/':case 'S':
+					setColor(4, 4);
 					break;
+				case '+':
+					setColor(12, 12);
+					break;
+				case '*':
+					setColor(3, 3);
+					break;
+				case '!':
+					setColor(7, 7);
+					break;
+				case '.':case ',':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '-':
+					setColor(5, 5);
+					break;
+				case '=':
+					setColor(14, 14);
+					break;
+					
 				default:
 					setColor(15, 0);
 					break;
