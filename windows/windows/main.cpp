@@ -67,6 +67,7 @@ void move(scene*, int);
 int isColi(scene*, int, int);
 int keyControl();
 void setColor(int, int);
+void titleDraw();
 
 
 /* MAIN Function */
@@ -75,6 +76,7 @@ int main()
 	//pokemonPrint();   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
 
 	system("mode con cols=120 lines=120");
+	//titleDraw();
 
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
@@ -88,8 +90,8 @@ int main()
 	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 	Sptr->HeroX = 11;
 	Sptr->HeroY = 12;
-	/*Sptr->HeroX = 8;
-	Sptr->HeroY = 24;*/
+	//Sptr->HeroX = 8;
+	//Sptr->HeroY = 24;
 
 	sceneMap(Sptr);
 	scenePrint(Sptr);
@@ -124,6 +126,7 @@ int main()
 	}
 
 	free(Sptr);
+	
 	return 0;
 }
 
@@ -1133,4 +1136,21 @@ void setColor(int color, int bgcolor)
 	color &= 0xf;
 	bgcolor &= 0xf;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
+}
+
+void titleDraw() {
+	printf("\n\n\n\n");
+	printf("  ###################    #######   ## ##      ##########              ##              #########   ###\n");
+	printf("  ##################    ########   ## ##      ###    ###            ######            ########    ###\n");
+	printf("       ##     ##            ###  #### ##      ###    ###           ########           ##          ###\n");
+	printf("        #     #          #####   #### ##      ##########          ##########          ######   ######\n");
+	printf("  ###################     ###      ## ##         ###             #####   #####        ######   ######\n");
+	printf("  ##################      ##       #  #     ###############     #####     ######      ##          ###\n");
+	printf("          ###                  ####         ##############     #####       ######     #######     ###\n");
+	printf("          ###               ####  ####         ##                                     ########    ###\n");
+	printf("######################     ####    ####        ##       #     ####################               ####\n");
+	printf("  ###################     ####       ###       #########      ###################               ####\n");
+	printf("                                                                                               ####\n");
+	printf("\n");
+	printf("\n");
 }
