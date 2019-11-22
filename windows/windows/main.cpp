@@ -144,7 +144,7 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 7;
+	wildPoke = 10;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
@@ -409,6 +409,37 @@ int fightMenu(scene* Sptr, int myturn)
 		}
 		break;
 	case 10: // 캐터피
+		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		if (myturn)
+			temp = getch();
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 물의파동;
+			break;
+		case '3':
+			skillNum = 거품광선;
+			break;
+		case '4':
+			skillNum = 몸통박치기;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
 		break;
 	case 25: //피카츄
 		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
@@ -1326,6 +1357,48 @@ void pokemonPrint(int pokeNum, int onlyHead)
 					setColor(14, 14);
 					break;
 					
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
+			case 10:  //캐터피
+				switch (ch)
+				{
+				case '@':case '#':case '%':
+					setColor(0, 0);
+					break;
+				case ';':case ':':
+					setColor(11, 11);
+					break;
+				case 'S':
+					setColor(4, 4);
+					break;
+				case '/':
+					setColor(12, 12);
+					break;
+				case '+':
+					setColor(10, 10);
+					break;
+				case '*':
+					setColor(2, 2);
+					break;
+				case '?':case '-':
+					setColor(7, 7);
+					break;
+				case ',':
+					setColor(14, 14);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '=':
+					setColor(14, 14);
+					break;
+
 				default:
 					setColor(15, 0);
 					break;
