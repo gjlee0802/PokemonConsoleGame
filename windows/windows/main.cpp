@@ -30,7 +30,7 @@
 #define 할퀴기	10
 
 struct Scene {
-	int sceneNum;			// == 맵의 번호
+	int sceneNum;				// 맵의 번호
 	char Coor[FIELD_SIZE][FIELD_SIZE];
 	
 	int HeroX;
@@ -144,11 +144,7 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-<<<<<<< HEAD
 	wildPoke = 7;
-=======
-	wildPoke = 25;
->>>>>>> origin
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
@@ -162,7 +158,7 @@ void battleInit(scene* Sptr)
 void battleMenu(scene* Sptr)
 {
 	Sptr->currPokeIndex = 0;
-	int myturn = 1;   // 0: 나의 턴 , 1: 상대 턴
+	int myturn = 1;   // 0: 상대 턴 , 1: 나의 턴
 	int skillNum = 0;
 	int damage = 0;
 
@@ -182,7 +178,6 @@ void battleMenu(scene* Sptr)
 			printf(">> 정신을 잃었다... 게임을 종료한다..\n");
 			printf("<<<<<  GAME OVER!!  >>>>>\n");
 			Sleep(3000);
-			//free(Sptr);
 			break;
 		}
 		if (Sptr->enemyPokeHealth <= 0)
@@ -413,7 +408,6 @@ int fightMenu(scene* Sptr, int myturn)
 			break;
 		}
 		break;
-		break;
 	case 10: // 캐터피
 		break;
 	case 25: //피카츄
@@ -448,6 +442,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 0;
 			break;
 		}
+		break;
 	}
 	return skillNum;
 }
