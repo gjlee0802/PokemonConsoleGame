@@ -50,6 +50,7 @@ struct Scene {
 	char enemyPokeName[30];
 
 	int story1;
+	int story2;
 	char yesorno;
 };
 typedef struct Scene scene;
@@ -94,7 +95,7 @@ int main()
 
 
 
-	Sptr->sceneNum = 1;
+	Sptr->sceneNum = 0;
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -102,6 +103,7 @@ int main()
 	Sptr->myPokeExp[0] = 0;
 	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 	Sptr->story1 = 0;
+	Sptr->story2 = 0;
 	Sptr->HeroX = 11;
 	Sptr->HeroY = 12;
 	//Sptr->HeroX = 8;
@@ -748,10 +750,10 @@ void checkEvent(scene* Sptr)	// This function would be executed when SPACE key p
 		break;
 	case 1:	// 연구소
 		// Check entrance
-		if ((Sptr->HeroX == 24 && Sptr->HeroY == 19)||
+		if ((Sptr->HeroX == 24 && Sptr->HeroY == 19) ||
 			(Sptr->HeroX == 23 && Sptr->HeroY == 19))
 			teleportMap(Sptr, 1, 0);
-		
+
 		// Talk with Professor
 		if (Sptr->story1 == 0) {
 			if (((24 - Sptr->HeroX == -1 || 24 - Sptr->HeroX == 1) && Sptr->HeroY == 8) ||
@@ -762,43 +764,90 @@ void checkEvent(scene* Sptr)	// This function would be executed when SPACE key p
 				getch();
 				printf("옆에 있는 포켓몬 세마리 중 하나를 고르렴.\n");
 				getch();
+				Sptr->story1 = 1;
 			}
 		}
-
 		//choice pokemon
-		if (Sptr->HeroX == 36 && Sptr->HeroY == 10) {
-			pokemonPrint(1, false);
-			printf("풀의 포켓몬 이상해씨를 고르시겠습니까?(y, n)");
-			scanf("%c", &Sptr->yesorno);
-			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
-				Sptr->myPokeNum[0] = 1;
-				printf("이상해씨를 손에 넣었다!");
-				getch();
+		if (Sptr->story1 == 1) {
+			if (Sptr->HeroX == 36 && Sptr->HeroY == 10) {
+				system("cls");
+				pokemonPrint(1, false);
+				printf("풀의 포켓몬 이상해씨를 고르시겠습니까?(y, n)");
+				Sptr->yesorno = getch();
+				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+					Sptr->myPokeNum[0] = 1;
+					printf("이상해씨를 손에 넣었다!");
+					getch();
+					Sptr->story2 = 1;
+				}
+				else if (Sptr->yesorno == 'n' || Sptr->yesorno == 'N') {
+				}
+			}
+			if (Sptr->HeroX == 40 && Sptr->HeroY == 10) {
+				system("cls");
+				pokemonPrint(4, false);
+				printf("불의 포켓몬 파이리를 고르시겠습니까?(y, n)");
+				Sptr->yesorno = getch();
+				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+					Sptr->myPokeNum[0] = 4;
+					printf("파이리를 손에 넣었다!");
+					getch();
+					Sptr->story2 = 1;
+				}
+			}
+			if (Sptr->HeroX == 44 && Sptr->HeroY == 10) {
+				system("cls");
+				pokemonPrint(7, false);
+				printf("물의 포켓몬 꼬부기를 고르시겠습니까?(y, n)");
+				Sptr->yesorno = getch();
+				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+					Sptr->myPokeNum[0] = 7;
+					printf("꼬부기를 손에 넣었다!");
+					getch();
+					Sptr->story2 = 1;
+				}
 			}
 		}
-		if (Sptr->HeroX == 40 && Sptr->HeroY == 10) {
-			pokemonPrint(4, false);
-			printf("불의 포켓몬 파이리를 고르시겠습니까?(y, n)");
-			scanf("%c", &Sptr->yesorno);
-			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
-				Sptr->myPokeNum[0] = 4;
-				printf("파이리를 손에 넣었다!");
-				getch();
-			}
-		}
-		if (Sptr->HeroX == 44 && Sptr->HeroY == 10) {
-			pokemonPrint(7, false);
-			printf("물의 포켓몬 꼬부기를 고르시겠습니까?(y, n)");
-			scanf("%c", &Sptr->yesorno);
-			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
-				Sptr->myPokeNum[0] = 7;
-				printf("꼬부기를 손에 넣었다!");
-				getch();
+		if (Sptr->story2 == 1) {
+			if (((24 - Sptr->HeroX == -1 || 24 - Sptr->HeroX == 1) && Sptr->HeroY == 8) ||
+				((8 - Sptr->HeroY == -1 || 8 - Sptr->HeroY == 1) && Sptr->HeroX == 24)) {
+				if (Sptr->myPokeNum[0] == 1) {
+					printf("풀의 포켓몬 이상해씨를 골랐구나\n");
+					getch();
+					printf("이상해씨가 왠지 기뻐하는 것 같아 보이는군\n");
+					getch();
+					printf("으음 알겠다.\n");
+					getch();
+					printf("그 이상해씨를 너에게 선물로 주겠다\n");
+					getch();
+				}
+				else if (Sptr->myPokeNum[0] == 4) {
+					printf("불의 포켓몬 파이리를 골랐구나\n");
+					getch();
+					printf("파이리가 왠지 기뻐하는 것 같아 보이는군\n");
+					getch();
+					printf("으음 알겠다.\n");
+					getch();
+					printf("그 파이리를 너에게 선물로 주겠다\n");
+					getch();
+				}
+				else if (Sptr->myPokeNum[0] == 4) {
+					printf("물의 포켓몬 꼬북이를 골랐구나\n");
+					getch();
+					printf("꼬북이가 왠지 기뻐하는 것 같아 보이는군\n");
+					getch();
+					printf("으음 알겠다.\n");
+					getch();
+					printf("그 꼬북이를 너에게 선물로 주겠다\n");
+					getch();
+				}
+				Sptr->story1 = 3;
 			}
 		}
 		break;
 	}
 }
+
 
 void teleportMap(scene* Sptr, int sceneNum0, int sceneNum1)
 {
