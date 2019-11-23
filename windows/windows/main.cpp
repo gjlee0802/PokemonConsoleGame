@@ -50,10 +50,9 @@ struct Scene {
 	char enemyPokeName[30];
 
 	int story1;
-	int story2;
+	char yesorno;
 };
 typedef struct Scene scene;
-
 
 
 // ** Functions
@@ -102,6 +101,7 @@ int main()
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * (pokeVal(Sptr->myPokeNum[0], "HP") + 200) / 50; //160) / 50;
 	Sptr->myPokeExp[0] = 0;
 	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
+	Sptr->story1 = 0;
 	Sptr->HeroX = 11;
 	Sptr->HeroY = 12;
 	//Sptr->HeroX = 8;
@@ -761,6 +761,38 @@ void checkEvent(scene* Sptr)	// This function would be executed when SPACE key p
 				printf("너 포켓몬이 없구나. 포켓몬을 키워보겠니?\n");
 				getch();
 				printf("옆에 있는 포켓몬 세마리 중 하나를 고르렴.\n");
+				getch();
+			}
+		}
+
+		//choice pokemon
+		if (Sptr->HeroX == 36 && Sptr->HeroY == 10) {
+			pokemonPrint(1, false);
+			printf("풀의 포켓몬 이상해씨를 고르시겠습니까?(y, n)");
+			scanf("%c", &Sptr->yesorno);
+			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+				Sptr->myPokeNum[0] = 1;
+				printf("이상해씨를 손에 넣었다!");
+				getch();
+			}
+		}
+		if (Sptr->HeroX == 40 && Sptr->HeroY == 10) {
+			pokemonPrint(4, false);
+			printf("불의 포켓몬 파이리를 고르시겠습니까?(y, n)");
+			scanf("%c", &Sptr->yesorno);
+			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+				Sptr->myPokeNum[0] = 4;
+				printf("파이리를 손에 넣었다!");
+				getch();
+			}
+		}
+		if (Sptr->HeroX == 44 && Sptr->HeroY == 10) {
+			pokemonPrint(7, false);
+			printf("물의 포켓몬 꼬부기를 고르시겠습니까?(y, n)");
+			scanf("%c", &Sptr->yesorno);
+			if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
+				Sptr->myPokeNum[0] = 7;
+				printf("꼬부기를 손에 넣었다!");
 				getch();
 			}
 		}
