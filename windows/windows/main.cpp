@@ -48,8 +48,12 @@ struct Scene {
 	int enemyPokeLevel;
 	int enemyPokeHealth;
 	char enemyPokeName[30];
+
+	int story1;
+	int story2;
 };
 typedef struct Scene scene;
+
 
 
 // ** Functions
@@ -88,7 +92,10 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 0;
+
+
+
+	Sptr->sceneNum = 1;
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -185,7 +192,7 @@ void battleMenu(scene* Sptr)
 			setColor(10, 0);
 			printf(">> 상대 포켓몬이 쓰러졌다!\n");
 			Sleep(1500);
-			Sptr->myPokeExp[0] = Sptr->myPokeExp[0] + (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel);
+			Sptr->myPokeExp[Sptr->currPokeIndex] = Sptr->myPokeExp[Sptr->currPokeIndex] + (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel);
 			//얻는 경험치는 상대포켓몬 레벨**3으로 설정
 			printf(">> 경험치가 %d만큼 증가했다!\n", (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel));
 			Sleep(1500);
@@ -197,9 +204,10 @@ void battleMenu(scene* Sptr)
 					printf(">> 레벨이 1 증가했다!\n");
 					Sleep(1500);
 				}
+				printf(">> 레벨이 %d(이)가 되었다!\n", Sptr->myPokeLevel[0]);
+				Sleep(2000);
+
 			}
-			printf(">> 레벨이 %d(이)가 되었다!\n", Sptr->myPokeLevel[0]);
-			Sleep(2000);
 			
 			break;
 		}
@@ -745,15 +753,16 @@ void checkEvent(scene* Sptr)	// This function would be executed when SPACE key p
 			teleportMap(Sptr, 1, 0);
 		
 		// Talk with Professor
-		if (((24 - Sptr->HeroX == -1 || 24 - Sptr->HeroX == 1) && Sptr->HeroY == 8) ||
-			((8 - Sptr->HeroY == -1 || 8 - Sptr->HeroY == 1) && Sptr->HeroX == 24))
-		{
-			printf("안녕! 난 오박사란다. \n");
-			getch();
-			printf("너 포켓몬이 없구나. 포켓몬을 키워보겠니?\n");
-			getch();
-			printf("옆에 있는 포켓몬 세마리 중 하나를 고르렴.\n");
-			getch();
+		if (Sptr->story1 == 0) {
+			if (((24 - Sptr->HeroX == -1 || 24 - Sptr->HeroX == 1) && Sptr->HeroY == 8) ||
+				((8 - Sptr->HeroY == -1 || 8 - Sptr->HeroY == 1) && Sptr->HeroX == 24)) {
+				printf("안녕! 난 오박사란다. \n");
+				getch();
+				printf("너 포켓몬이 없구나. 포켓몬을 키워보겠니?\n");
+				getch();
+				printf("옆에 있는 포켓몬 세마리 중 하나를 고르렴.\n");
+				getch();
+			}
 		}
 		break;
 	}
