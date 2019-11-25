@@ -20,6 +20,8 @@
 #define 파워휩	438
 #define 물의파동 352
 #define 역린		200
+#define 전자포	192
+#define 번개		87
 #define 솔라빔	76
 #define 잎날가르기 75
 #define 거품광선	61
@@ -92,9 +94,6 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-
-
-
 	Sptr->sceneNum = 0;
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
@@ -153,11 +152,11 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 10;
+	wildPoke = 25;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
-	Sptr->enemyPokeLevel = rand() % 15 + 1;   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
+	Sptr->enemyPokeLevel = 5+((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	//Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 체력은 레벨의 30배로 설정.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;	// 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
 	pokemonPrint(Sptr->enemyPokeNum, false); 
@@ -323,15 +322,17 @@ int fightMenu(scene* Sptr, int myturn)
 	switch (pokeNum)   // 포켓몬 도감번호 
 	{
 	case 1:   // 이상해씨
-		printf("1.몸통박치기 2.덩굴채찍 3.잎날가르기 4.솔라빔\n\n");
-		if (myturn)	
-			temp = getch();
+		printf("1.몸통박치기 2.덩굴채찍 3.잎날가르기 4.파워휩\n\n");
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
 		else if (!myturn)
 		{
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
-			setColor(10,0);
-			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!", Sptr->enemyPokeName,temp);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!", Sptr->enemyPokeName, temp);
 			pokemonPrint(Sptr->enemyPokeNum, 1);
 			Sleep(2000);
 		}
@@ -355,8 +356,10 @@ int fightMenu(scene* Sptr, int myturn)
 		break;
 	case 4:   // 파이리
 		printf("1.할퀴기 2.불꽃세례 3.화염방사 4.역린\n\n");
-		if (myturn)	
-			temp = getch();
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
 		else if (!myturn)
 		{
 			srand((unsigned int)time(NULL));
@@ -388,7 +391,9 @@ int fightMenu(scene* Sptr, int myturn)
 	case 7:   // 꼬부기
 		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
 		if (myturn)
-			temp = getch();
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
 		else if (!myturn)
 		{
 			srand((unsigned int)time(NULL));
@@ -421,7 +426,9 @@ int fightMenu(scene* Sptr, int myturn)
 	case 10: // 캐터피
 		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
 		if (myturn)
-			temp = getch();
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
 		else if (!myturn)
 		{
 			srand((unsigned int)time(NULL));
@@ -452,9 +459,11 @@ int fightMenu(scene* Sptr, int myturn)
 		}
 		break;
 	case 25: //피카츄
-		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		printf("1.할퀴기 2.몸통박치기	 3.번개  4.전자포\n\n");
 		if (myturn)
-			temp = getch();
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
 		else if (!myturn)
 		{
 			srand((unsigned int)time(NULL));
@@ -471,13 +480,13 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 할퀴기;
 			break;
 		case '2':
-			skillNum = 물의파동;
+			skillNum = 몸통박치기;
 			break;
 		case '3':
-			skillNum = 거품광선;
+			skillNum = 번개;
 			break;
 		case '4':
-			skillNum = 몸통박치기;	// 추후 변경
+			skillNum = 전자포;	// 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -529,6 +538,10 @@ int techVal(int techNum, const char* keyword)
 			return 3;
 		case 솔라빔:
 			return 3;
+		case 번개:
+			return 4;
+		case 전자포:
+			return 4;
 		case 역린:
 			return 14;
 		case 물의파동:
@@ -555,6 +568,8 @@ int pokeVal(int pokeNum, const char* keyword)
 			return 39;
 		case 7:
 			return 44;
+		case 25:
+			return 35;
 		default:
 			printf("pokeVal() : Can't find such pokemon!\n");
 			return 0;
@@ -570,6 +585,8 @@ int pokeVal(int pokeNum, const char* keyword)
 			return 52;
 		case 7:
 			return 48;
+		case 25:
+			return 55;
 		default:
 			printf("pokeVal() : Can't find such pokemon!\n");
 			return 0;
@@ -585,6 +602,8 @@ int pokeVal(int pokeNum, const char* keyword)
 			return 43;
 		case 7:
 			return 65;
+		case 25:
+			return 30;
 		default:
 			printf("pokeVal() : Can't find such pokemon!\n");
 			return 0;
@@ -600,6 +619,8 @@ int pokeVal(int pokeNum, const char* keyword)
 			return 1;
 		case 7:
 			return 2;
+		case 25:
+			return 4;
 		default:
 			printf("pokeVal() : Can't find such pokemon!\n");
 			return 0;
@@ -661,6 +682,7 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 120;
 		setColor(10, 0);
 		skillPrint("attack_hit_Grass_3.txt");
+		break;
 	case 물의파동:
 		dmg = 60;
 		setColor(9,0);
@@ -671,8 +693,19 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		setColor(12,0);
 		skillPrint("fire_Sacred_Fire.txt");
 		break;
+	case 전자포:
+		dmg = 120;
+		setColor(14,0);
+		skillPrint("attack_hit_Electric_2.txt");
+		break;
+	case 번개:
+		dmg = 110;
+		setColor(14,0);
+		skillPrint("elec_Thunder.txt");
+		break;
 	case 솔라빔:
 		dmg = 120;
+		setColor(10,0);
 		skillPrint("attack_hit_Grass_3.txt");
 		break;
 	case 잎날가르기:
@@ -724,14 +757,16 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 			* 1;*/
 		dmg = dmg *
 			pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK") / pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "DEF") *
-			(Sptr->myPokeLevel[Sptr->currPokeIndex]+2) / 50 * typeRel(skillNum, Sptr->enemyPokeNum);
+			(Sptr->myPokeLevel[Sptr->currPokeIndex]+2) / 50 * typeRel(skillNum, Sptr->enemyPokeNum)
+			+ rand() % 5;
 		printf("damage : %d\n", int(dmg));
 	}
 	else
 	{
 		dmg = dmg *
 			pokeVal(Sptr->enemyPokeNum, "ATK") / pokeVal(Sptr->enemyPokeNum, "DEF") *
-			(Sptr->enemyPokeLevel + 2) / 50 * typeRel(skillNum, Sptr->myPokeNum[Sptr->currPokeIndex]);
+			(Sptr->enemyPokeLevel + 2) / 50 * typeRel(skillNum, Sptr->myPokeNum[Sptr->currPokeIndex])
+			+ rand() % 5;
 		printf("damage : %d\n", int(dmg));
 	}
 
@@ -1536,6 +1571,9 @@ void pokemonPrint(int pokeNum, int onlyHead)
 				break;
 			case 7:
 				setColor(9, 0);
+				break;
+			case 25:
+				setColor(14, 0);
 				break;
 			}
 		}
