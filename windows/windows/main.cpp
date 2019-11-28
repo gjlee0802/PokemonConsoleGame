@@ -152,7 +152,7 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 25;
+	wildPoke = 43;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
@@ -458,6 +458,76 @@ int fightMenu(scene* Sptr, int myturn)
 			break;
 		}
 		break;
+	case 16: // 구구
+		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 물의파동;
+			break;
+		case '3':
+			skillNum = 거품광선;
+			break;
+		case '4':
+			skillNum = 몸통박치기;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
+		break;
+	case 19: // 꼬렛
+		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 물의파동;
+			break;
+		case '3':
+			skillNum = 거품광선;
+			break;
+		case '4':
+			skillNum = 몸통박치기;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
+		break;
 	case 25: //피카츄
 		printf("1.할퀴기 2.몸통박치기	 3.번개  4.전자포\n\n");
 		if (myturn)
@@ -487,6 +557,76 @@ int fightMenu(scene* Sptr, int myturn)
 			break;
 		case '4':
 			skillNum = 전자포;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
+		break;
+	case 39: //푸린
+		printf("1.할퀴기 2.몸통박치기	 3.번개  4.전자포\n\n");
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 몸통박치기;
+			break;
+		case '3':
+			skillNum = 번개;
+			break;
+		case '4':
+			skillNum = 전자포;	// 추후 변경
+			break;
+		default:
+			skillNum = 0;
+			break;
+		}
+		break;
+	case 43: // 뚜벅초
+		printf("1.할퀴기 2.물의파동 3.거품광선 4.몸통박치기\n\n");
+		if (myturn)
+		{
+			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
+		}
+		else if (!myturn)
+		{
+			srand((unsigned int)time(NULL));
+			temp = (char)(rand() % 4 + 1 + 48);
+			setColor(10, 0);
+			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
+			setColor(9, 0);
+			pokemonPrint(Sptr->enemyPokeNum, 1);
+			Sleep(2000);
+		}
+		switch (temp)
+		{
+		case '1':
+			skillNum = 할퀴기;
+			break;
+		case '2':
+			skillNum = 물의파동;
+			break;
+		case '3':
+			skillNum = 거품광선;
+			break;
+		case '4':
+			skillNum = 몸통박치기;	// 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -1529,6 +1669,90 @@ void pokemonPrint(int pokeNum, int onlyHead)
 					break;
 				}
 				break;
+			case 16:  //구구
+				switch (ch)
+				{
+				case '@':case '#':
+					setColor(0, 0);
+					break;
+				case ';':case ':':
+					setColor(7, 7);
+					break;
+				case 'S':
+					setColor(12, 12);
+					break;
+				case '/':
+					setColor(12, 12);
+					break;
+				case '+':
+					setColor(2, 2);
+					break;
+				case '*':
+					setColor(2, 2);
+					break;
+				case '?':case '%':
+					setColor(6, 6);
+					break;
+				case ',':
+					setColor(14, 14);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '=':
+					setColor(8, 8);
+					break;
+
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
+			case 19:  //꼬렛
+				switch (ch)
+				{
+				case '@':case '#':
+					setColor(0, 0);
+					break;
+				case ';':case ':':
+					setColor(7, 7);
+					break;
+				case 'S':
+					setColor(12, 12);
+					break;
+				case '/':
+					setColor(12, 12);
+					break;
+				case '+':
+					setColor(8, 8);
+					break;
+				case '*':
+					setColor(13, 13);
+					break;
+				case '?':case '%':
+					setColor(5, 5);
+					break;
+				case ',':
+					setColor(14, 14);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '=':
+					setColor(8, 8);
+					break;
+
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
 			case 25:  //피카츄
 				switch (ch)
 				{
@@ -1550,6 +1774,86 @@ void pokemonPrint(int pokeNum, int onlyHead)
 				case '%':
 					setColor(4, 4);
 					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
+			case 39:  //푸린
+				switch (ch)
+				{
+				case '@':
+					setColor(0, 0);
+					break;
+				case ';':case ':':case ',':
+					setColor(7, 7);
+					break;
+				case '%':case 'S':
+					setColor(3, 3);
+					break;
+				case '#':
+					setColor(9, 9);
+					break;
+				case '+':
+					setColor(8, 8);
+					break;
+				case '*':
+					setColor(13, 13);
+					break;
+				case '?':
+					setColor(5, 5);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '=':
+					setColor(8, 8);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+				break;
+			case 43:  //뚜벅초
+				switch (ch)
+				{
+				case '@':case '#':
+					setColor(0, 0);
+					break;
+				case ';':case ':':
+					setColor(7, 7);
+					break;
+				case 'S':
+					setColor(12, 12);
+					break;
+				case '*':
+					setColor(3, 3);
+					break;
+				case '+':
+					setColor(10, 10);
+					break;
+				case '%':
+					setColor(9, 9);
+					break;
+				case '?':
+					setColor(2, 2);
+					break;
+				case ',':
+					setColor(14, 14);
+					break;
+				case '.':
+					setColor(15, 15);
+					break;
+				case '^':
+					setColor(6, 6);
+					break;
+				case '=':
+					setColor(8, 8);
+					break;
+
 				default:
 					setColor(15, 0);
 					break;
