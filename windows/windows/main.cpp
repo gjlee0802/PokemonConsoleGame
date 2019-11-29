@@ -1257,9 +1257,9 @@ void sceneMap(scene* Sptr) {
 	case 2: {
 		for (i = 0; i < ROOM_SIZE; i++)
 		{
-			Sptr->Coor[0][i] = '-';
-			Sptr->Coor[18][i] = '-';
-			Sptr->Coor[19][i] = '-';
+			Sptr->Coor[0][i] = '|';
+			Sptr->Coor[18][i] = '|';
+			Sptr->Coor[19][i] = '|';
 			Sptr->Coor[i][0] = '|';
 			Sptr->Coor[i][19] = '|';
 		}
@@ -1284,7 +1284,17 @@ void sceneMap(scene* Sptr) {
 		for (j = 12; j <= 17; j += 2)
 			Sptr->Coor[4][j] = '|';
 
-
+		//toile
+		for (int i = 1; i < 6; i++)
+		{
+			Sptr->Coor[13][i] = '|';
+		}
+		for (int i = 13; i < 18; i++)
+		{
+			Sptr->Coor[i][5] = '|';
+		}
+		Sptr->Coor[13][3] = ' ';
+		Sptr->Coor[17][3] = 'w';
 
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
@@ -1443,6 +1453,9 @@ void scenePrint(scene* Sptr)
 					break;
 				case 'T':
 					setColor(6, 6);
+					break;
+				case 'w':
+					setColor(11, 11);
 					break;
 				default:
 					setColor(15, 0);
