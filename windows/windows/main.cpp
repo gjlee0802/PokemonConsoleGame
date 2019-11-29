@@ -17,19 +17,19 @@
 #define SPACE 4
 #define QUIT 9
 
-#define 파워휩	438
-#define 물의파동 352
-#define 역린		200
-#define 전자포	192
-#define 번개		87
-#define 솔라빔	76
-#define 잎날가르기 75
-#define 거품광선	61
-#define 화염방사 53
-#define 불꽃세례 52
-#define 몸통박치기 33
-#define 덩굴채찍	22
-#define 할퀴기	10
+#define 파워휩		438
+#define 물의파동		352
+#define 역린			200
+#define 전자포		192
+#define 번개			87
+#define 솔라빔		76
+#define 잎날가르기	75
+#define 거품광선		61
+#define 화염방사		53
+#define 불꽃세례		52
+#define 몸통박치기	33
+#define 덩굴채찍		22
+#define 할퀴기		10
 
 struct Scene {
 	int sceneNum;				// 맵의 번호
@@ -40,9 +40,9 @@ struct Scene {
 	int myPokeNum[6] = { 0 };   // 갖고 있는 포켓몬의 도감번호
 	int myPokeLevel[6];			// 갖고 있는 포켓몬의 레벨
 	int myPokeHealth[6];		// 갖고 있는 포켓몬의 체력
-	int myPokeExp[6];			//갖고 있는 포켓몬의 경험치
-	int LevelUpExp[6];			//레벨업 위해 얻어야 할 경험치
-	int leftedExp[6];			//레벨업하고 남은 경험치 버퍼
+	int myPokeExp[6];			// 갖고 있는 포켓몬의 경험치
+	int LevelUpExp[6];			// 레벨업 위해 얻어야 할 경험치
+	int leftedExp[6];			// 레벨업하고 남은 경험치 버퍼
 	int currPokeIndex = 0;		// 가장 먼저 나올 포켓몬 or 현재 배틀중인 포켓몬의 인덱스
 	char currPokeName[30];
 
