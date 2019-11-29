@@ -9,6 +9,7 @@
 
 #define LAB_VERTICAL_FIELD_SIZE 21
 #define FIELD_SIZE 50
+#define ROOM_SIZE 20
 
 #define UP 0
 #define DOWN 1
@@ -81,6 +82,7 @@ int isColi(scene*, int, int);
 int keyControl();
 void setColor(int, int);
 void titleDraw();
+void start_story();
 
 
 /* MAIN Function */
@@ -94,7 +96,7 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 0;
+	Sptr->sceneNum = 2;
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -107,6 +109,8 @@ int main()
 	Sptr->HeroY = 12;
 	//Sptr->HeroX = 8;
 	//Sptr->HeroY = 24;
+
+	//start_story();
 
 	sceneMap(Sptr);
 	scenePrint(Sptr);
@@ -139,7 +143,7 @@ int main()
 		sceneMap(Sptr);
 		scenePrint(Sptr);
 	}
-
+	
 	free(Sptr);
 	
 	return 0;
@@ -1087,13 +1091,13 @@ void sceneMap(scene* Sptr)
 			Sptr->Coor[34][j] = '=';
 		for (i = 32; i <= 34; i++)
 			Sptr->Coor[i][41] = '=';
-		for (j = 42; j < FIELD_SIZE-1; j++)
+		for (j = 42; j < FIELD_SIZE - 1; j++)
 			Sptr->Coor[32][j] = '=';
 
-		for (j = 1; j < FIELD_SIZE-1; j++)
+		for (j = 1; j < FIELD_SIZE - 1; j++)
 		{
 			int water_cnt = 0;
-			for (i = 31; i < FIELD_SIZE-1; i++)
+			for (i = 31; i < FIELD_SIZE - 1; i++)
 				if (Sptr->Coor[i][j] == '=')
 				{
 					++water_cnt;
@@ -1118,7 +1122,7 @@ void sceneMap(scene* Sptr)
 		for (j = 3; j < 10; j++)
 			Sptr->Coor[20][j] = '=';
 		Sptr->Coor[19][4] = 'H'; Sptr->Coor[19][5] = 'O'; Sptr->Coor[19][6] = 'U'; Sptr->Coor[19][7] = 'S'; Sptr->Coor[19][8] = 'E';
-		Sptr->Coor[22][7] = '['; Sptr->Coor[22][8] = ']';
+		Sptr->Coor[22][6] = '['; Sptr->Coor[22][8] = ']';
 		for (j = 3; j < 10; j++)
 			Sptr->Coor[23][j] = '=';
 
@@ -1228,8 +1232,11 @@ void sceneMap(scene* Sptr)
 				Sptr->Coor[i][j] = 'E';
 		}
 
+
+		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		break;
 	}
-		  Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+	
 	}//Switch end
 
 }
@@ -1285,67 +1292,68 @@ void scenePrint(scene* Sptr)
 			setColor(15, 0);
 		}
 	}
-	else if(Sptr->sceneNum == 1) {
-			system("cls");
-			int i = 0;
-			printf("   ");
-			for (i = 0; i < FIELD_SIZE; i++)
+	else if (Sptr->sceneNum == 1) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < FIELD_SIZE; j++)
 			{
-				if (i < 9)
-					printf("%d ", i);
-				else
-					printf("%d", i);
+				switch (Sptr->Coor[i][j])
+				{
+				case 'T':
+					setColor(14, 14);
+					break;
+				case '|':
+					setColor(14, 0);
+					break;
+				case 'b':
+					setColor(4, 4);
+					break;
+				case 'p':
+					setColor(15, 15);
+					break;
+				case 'm':
+					setColor(1, 1);
+					break;
+				case 'c':
+					setColor(23, 23);
+					break;
+				case 'E':
+					setColor(0, 8);
+					break;
+				case 'A':
+					setColor(2, 2);
+					break;
+				case '^':
+					setColor(7, 7);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
 			}
 			printf("\n");
-			for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
-			{
-				if (i <= 9)
-					printf("%1d: ", i);
-				else
-					printf("%1d:", i);
-				for (int j = 0; j < FIELD_SIZE; j++)
-				{
-					switch (Sptr->Coor[i][j])
-					{
-					case 'T':
-						setColor(14, 14);
-						break;
-					case '|':
-						setColor(14, 0);
-						break;
-					case 'b':
-						setColor(4, 4);
-						break;
-					case 'p':
-						setColor(15, 15);
-						break;
-					case 'm':
-						setColor(1,1);
-						break;
-					case 'c':
-						setColor(23, 23);
-						break;
-					case 'E':
-						setColor(0,8);
-						break;
-					case 'A':
-						setColor(2, 2);
-						break;
-					case '^':
-						setColor(7,7);
-						break;
-					default:
-						setColor(15, 0);
-						break;
-					}
+			setColor(15, 0);
+		}
 
-					printf("%c ", Sptr->Coor[i][j]);
-				}
-				printf("\n");
-				setColor(15,0);
-			}
-		
 	}
+	
 }
 
 void move(scene* Sptr, int keyInput)
@@ -1933,4 +1941,32 @@ void titleDraw() {
 	printf("                                                                                               ####\n");
 	printf("\n");
 	printf("\n");
+}
+
+void start_story() {
+	char name[20];
+	system("cls");
+	printf("이 세계에는 '포켓몬스터'\n\n");
+	Sleep(2000);
+	printf("줄여서 포켓몬이라 불리는 신기한 생명체가 도처에 살고있다.\n\n");
+	Sleep(2000);
+	printf("우리 인간은 포켓몬과 사이좋게 살고있다.\n\n");
+	Sleep(2000);
+	printf("함께 놀기도 하고 힘을 합쳐 일을 하기도 하고\n\n");
+	Sleep(2000);
+	printf("그리고 포켓몬끼리 싸우게 하여 유대감을 돈독히 다지기도 한다.\n\n");
+	Sleep(2000);
+	system("cls");
+	printf("...\n\n");
+	Sleep(2500);
+	printf("당신의 이름은?\n\n");
+	scanf("%s", &name);
+	system("cls");
+	Sleep(1000);
+	printf("%s!!\n\n", name);
+	Sleep(2000);
+	printf("이제부터 당신만의 이야기가 시작된다.\n\n");
+	Sleep(2000);
+	printf("그럼 포켓몬스터의 세계로!\n\n");
+	Sleep(2000);
 }
