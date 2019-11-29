@@ -926,6 +926,8 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 	   // Check entrance
 		if (Sptr->HeroX == 30 && Sptr->HeroY == 24)
 			teleportMap(Sptr, 0, 1);
+		else if (Sptr->HeroX == 7 && Sptr->HeroY == 24)
+			teleportMap(Sptr, 0, 2);
 		break;
 	case 1:   // ¿¬±¸¼Ò
 	   // Check entrance
@@ -1024,6 +1026,10 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 			}
 		}
 		break;
+	case 2:
+		if ((Sptr->HeroX == 10 && Sptr->HeroY == 18) ||
+			(Sptr->HeroX == 9 && Sptr->HeroY == 18))
+			teleportMap(Sptr, 2, 0);
 	}
 }
 
@@ -1042,6 +1048,19 @@ void teleportMap(scene* Sptr, int sceneNum0, int sceneNum1)
 		Sptr->HeroY = 24;
 		Sptr->sceneNum = 0;
 	}
+	else if (sceneNum0 == 2 && sceneNum1 == 0)
+	{
+		Sptr->HeroX = 7;
+		Sptr->HeroY = 24;
+		Sptr->sceneNum = 0;
+	}
+	else if (sceneNum0 == 0 && sceneNum1 == 2)
+	{
+		Sptr->HeroX = 10;
+		Sptr->HeroY = 18;
+		Sptr->sceneNum = 2;
+	}
+
 }
 
 /* Draw/Print Functions */
