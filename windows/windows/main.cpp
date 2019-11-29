@@ -1231,11 +1231,42 @@ void sceneMap(scene* Sptr)
 			for (int j = 35; j <= 45; j++)
 				Sptr->Coor[i][j] = 'E';
 		}
+	case 2: {
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			Sptr->Coor[0][i] = '-';
+			Sptr->Coor[18][i] = '-';
+			Sptr->Coor[19][i] = '-';
+			Sptr->Coor[i][0] = '|';
+			Sptr->Coor[i][19] = '|';
+		}
+		for (i = 1; i < ROOM_SIZE - 2; i++)
+			for (j = 1; j < ROOM_SIZE - 1; j++)
+				Sptr->Coor[i][j] = ' ';
+
+		//bed
+		for (i = 2; i < 5; i++) {
+			for (j = 2; j < 7; j++) {
+				Sptr->Coor[2][i] = 'b';
+				Sptr->Coor[j][i] = 'r';
+			}
+		}
+
+		//door open
+		Sptr->Coor[18][10] = ' ';
+		Sptr->Coor[18][9] = ' ';
+
+		for (i = 12; i < 17; i++)
+			Sptr->Coor[3][i] = 'T';
+		for (j = 12; j <= 17; j += 2)
+			Sptr->Coor[4][j] = '|';
+
 
 
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
 	}
+
 	
 	}//Switch end
 
@@ -1353,14 +1384,61 @@ void scenePrint(scene* Sptr)
 		}
 
 	}
+	else if (Sptr->sceneNum == 2) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < ROOM_SIZE; j++)
+			{
+				switch (Sptr->Coor[i][j])
+				{
+				case '-':
+					setColor(8, 8);
+					break;
+				case '|':
+					setColor(8, 8);
+					break;
+				case 'b':
+					setColor(15, 15);
+					break;
+				case 'r':
+					setColor(4, 4);
+					break;
+				case 'T':
+					setColor(6, 6);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
+			}
+			printf("\n");
+			setColor(15, 0);
+		}
+	}
 	
 }
 
 void move(scene* Sptr, int keyInput)
 {
 
-	switch (keyInput)
-	{
+	switch (keyInput) {
 	case UP:
 		if (!(isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) - 1)))
 			Sptr->HeroY = Sptr->HeroY - 1;
@@ -1385,6 +1463,7 @@ void move(scene* Sptr, int keyInput)
 		else
 			printf("Colision detected!\n");
 		break;
+
 	default:
 		printf("move() err : can't understand keyinput : %d\n", keyInput);
 	}
