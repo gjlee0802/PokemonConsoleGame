@@ -66,11 +66,11 @@ C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\ma
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\conio.h(453): message :  'getch' 선언을 참조하십시오.
 C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(1026,1): warning C4996:  'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\conio.h(453): message :  'getch' 선언을 참조하십시오.
-C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(1717,28): warning C4805:  '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2095,29): warning C4805:  '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2122,2): warning C4996:  'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(1895,28): warning C4805:  '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2273,29): warning C4805:  '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2300,2): warning C4996:  'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\conio.h(453): message :  'getch' 선언을 참조하십시오.
 C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(703): warning C4715:  'techVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
 C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(776): warning C4715:  'pokeVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
-C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2141): warning C4715:  'keyControl': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\windows\main.cpp(2319): warning C4715:  'keyControl': 모든 제어 경로에서 값을 반환하지는 않습니다.
   windows.vcxproj -> C:\Users\user\Desktop\univ\1-2\Programming\PokemonConsoleGame\windows\Debug\windows.exe

@@ -1314,6 +1314,172 @@ void sceneMap(scene* Sptr) {
 		for (i = 1; i < FIELD_SIZE - 1; i++)
 			for (j = 1; j < FIELD_SIZE - 1; j++)
 				Sptr->Coor[i][j] = ' ';
+
+		//bush1
+		for (i = 5; i < 15; i++) {
+			for (j = 5; j < 14; j++)
+				Sptr->Coor[j][i] = 'M';
+		}
+
+		int k = 1;
+		for (i = 16; i < 28; i++) {
+			for (j = 5; j < 14+k; j++) {
+				Sptr->Coor[i][j] = 'M';
+			}
+			k++;
+		}
+		//bush2
+		for (i = 36; i < 45; i++) {
+			for (j = 5; j < 40; j++)
+				Sptr->Coor[i][j] = 'M';
+		}
+
+		//bush3
+		for (j = 3; j < 12; j++) {
+			for (i = 25; i < 41; i++)
+				Sptr->Coor[j][i] = 'M';
+		}
+
+		//tree1
+		Sptr->Coor[1][20] = 'T';
+		for (i = 19; i < 22; i++) {
+			Sptr->Coor[2][i] = 'T';
+			Sptr->Coor[3][i] = 'T';
+		}
+		for (i = 18; i < 23; i++) {
+			Sptr->Coor[4][i] = 'T';
+			Sptr->Coor[5][i] = 'T';
+			Sptr->Coor[6][i] = 'T';
+		}
+		for (i = 17; i < 24; i++)
+			Sptr->Coor[7][i] = 'T';
+		for (i = 8; i < 10; i++) {
+			for (j = 19; j < 22; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//tree2
+		Sptr->Coor[10][20] = 'T';
+		for (i = 19; i < 22; i++) {
+			Sptr->Coor[11][i] = 'T';
+			Sptr->Coor[12][i] = 'T';
+		}
+		for (i = 18; i < 23; i++) {
+			Sptr->Coor[13][i] = 'T';
+			Sptr->Coor[14][i] = 'T';
+			Sptr->Coor[15][i] = 'T';
+		}
+		for (i = 17; i < 24; i++)
+			Sptr->Coor[16][i] = 'T';
+		for (i = 17; i < 19; i++) {
+			for (j = 19; j < 22; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//tree3
+		Sptr->Coor[1][45] = 'T';
+		for (i = 44; i < 47; i++) {
+			Sptr->Coor[2][i] = 'T';
+			Sptr->Coor[3][i] = 'T';
+		}
+		for (i = 43; i < 48; i++) {
+			Sptr->Coor[4][i] = 'T';
+			Sptr->Coor[5][i] = 'T';
+			Sptr->Coor[6][i] = 'T';
+		}
+		for (i = 42; i < 49; i++)
+			Sptr->Coor[7][i] = 'T';
+		for (i = 8; i < 10; i++) {
+			for (j = 44; j < 47; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+		
+		//tree4
+		Sptr->Coor[10][45] = 'T';
+		for (i = 44; i < 47; i++) {
+			Sptr->Coor[11][i] = 'T';
+			Sptr->Coor[12][i] = 'T';
+		}
+		for (i = 43; i < 48; i++) {
+			Sptr->Coor[13][i] = 'T';
+			Sptr->Coor[14][i] = 'T';
+			Sptr->Coor[15][i] = 'T';
+		}
+		for (i = 42; i < 49; i++)
+			Sptr->Coor[16][i] = 'T';
+		for (i = 17; i < 19; i++) {
+			for (j = 44; j < 47; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//tree5
+		Sptr->Coor[19][45] = 'T';
+		for (i = 44; i < 47; i++) {
+			Sptr->Coor[20][i] = 'T';
+			Sptr->Coor[21][i] = 'T';
+		}
+		for (i = 43; i < 48; i++) {
+			Sptr->Coor[22][i] = 'T';
+			Sptr->Coor[23][i] = 'T';
+			Sptr->Coor[24][i] = 'T';
+		}
+		for (i = 42; i < 49; i++)
+			Sptr->Coor[25][i] = 'T';
+		for (i = 26; i < 28; i++) {
+			for (j = 44; j < 47; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//tree6
+		Sptr->Coor[28][45] = 'T';
+		for (i = 44; i < 47; i++) {
+			Sptr->Coor[29][i] = 'T';
+			Sptr->Coor[30][i] = 'T';
+		}
+		for (i = 43; i < 48; i++) {
+			Sptr->Coor[31][i] = 'T';
+			Sptr->Coor[32][i] = 'T';
+			Sptr->Coor[33][i] = 'T';
+		}
+		for (i = 42; i < 49; i++)
+			Sptr->Coor[34][i] = 'T';
+		for (i = 35; i < 37; i++) {
+			for (j = 44; j < 47; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//tree7
+		Sptr->Coor[37][45] = 'T';
+		for (i = 44; i < 47; i++) {
+			Sptr->Coor[38][i] = 'T';
+			Sptr->Coor[39][i] = 'T';
+		}
+		for (i = 43; i < 48; i++) {
+			Sptr->Coor[40][i] = 'T';
+			Sptr->Coor[41][i] = 'T';
+			Sptr->Coor[42][i] = 'T';
+		}
+		for (i = 42; i < 49; i++)
+			Sptr->Coor[43][i] = 'T';
+		for (i = 44; i < 46; i++) {
+			for (j = 44; j < 47; j++)
+				Sptr->Coor[i][j] = 't';
+		}
+
+		//fence1
+		for (i = 8; i < 40; i++)
+			Sptr->Coor[34][i] = '^';
+
+		//fence2
+		for (i = 28; i < 41; i++)
+			Sptr->Coor[13][i] = '^';
+
+
+
+
+
+
+
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
 	}
@@ -1560,6 +1726,18 @@ void scenePrint(scene* Sptr)
 				{
 				case '^' :
 					setColor(2, 15);
+					break;
+
+				case 'T':
+					setColor(2, 2);
+					break;
+
+				case 't':
+					setColor(6, 6);
+					break;
+
+				case 'M':
+					setColor(0, 10);
 					break;
 				
 				default:
