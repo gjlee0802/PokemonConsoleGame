@@ -102,14 +102,45 @@ int main()
 
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
+	Sptr->myPokeNum[1] = 1;
+	Sptr->myPokeNum[2] = 0;
+	Sptr->myPokeNum[3] = 0;
+	Sptr->myPokeNum[4] = 0;
+	Sptr->myPokeNum[5] = 0;
 	Sptr->myPokeLevel[0] = 5;
+	Sptr->myPokeLevel[1] = 5;
+	Sptr->myPokeLevel[2] = 5;
+	Sptr->myPokeLevel[3] = 5;
+	Sptr->myPokeLevel[4] = 5;
+	Sptr->myPokeLevel[5] = 5;
+
 	Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * (pokeVal(Sptr->myPokeNum[0], "HP") + 200) / 50; //160) / 50;
 	Sptr->myPokeExp[0] = 0;
 	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
+
+	Sptr->myPokeHealth[1] = Sptr->myPokeLevel[1] * (pokeVal(Sptr->myPokeNum[1], "HP") + 200) / 50; //160) / 50;
+	Sptr->myPokeExp[1] = 0;
+	Sptr->LevelUpExp[1] = (Sptr->myPokeLevel[1] + 1) * (Sptr->myPokeLevel[1] + 1) * (Sptr->myPokeLevel[1] + 1);
+
+	Sptr->myPokeHealth[2] = Sptr->myPokeLevel[2] * (pokeVal(Sptr->myPokeNum[2], "HP") + 200) / 50; //160) / 50;
+	Sptr->myPokeExp[2] = 0;
+	Sptr->LevelUpExp[2] = (Sptr->myPokeLevel[2] + 1) * (Sptr->myPokeLevel[2] + 1) * (Sptr->myPokeLevel[2] + 1);
+
+	Sptr->myPokeHealth[3] = Sptr->myPokeLevel[3] * (pokeVal(Sptr->myPokeNum[3], "HP") + 200) / 50; //160) / 50;
+	Sptr->myPokeExp[3] = 0;
+	Sptr->LevelUpExp[3] = (Sptr->myPokeLevel[3] + 1) * (Sptr->myPokeLevel[3] + 1) * (Sptr->myPokeLevel[3] + 1);
+
+	Sptr->myPokeHealth[4] = Sptr->myPokeLevel[4] * (pokeVal(Sptr->myPokeNum[4], "HP") + 200) / 50; //160) / 50;
+	Sptr->myPokeExp[4] = 0;
+	Sptr->LevelUpExp[4] = (Sptr->myPokeLevel[4] + 1) * (Sptr->myPokeLevel[4] + 1) * (Sptr->myPokeLevel[4] + 1);
+
+	Sptr->myPokeHealth[5] = Sptr->myPokeLevel[5] * (pokeVal(Sptr->myPokeNum[5], "HP") + 200) / 50; //160) / 50;
+	Sptr->myPokeExp[5] = 0;
+	Sptr->LevelUpExp[5] = (Sptr->myPokeLevel[5] + 1) * (Sptr->myPokeLevel[5] + 1) * (Sptr->myPokeLevel[5] + 1);
 	Sptr->story1 = 0;
 	Sptr->story2 = 0;
-	Sptr->HeroX = 48;
-	Sptr->HeroY = 25;
+	Sptr->HeroX = 11;
+	Sptr->HeroY = 12;
 	//Sptr->HeroX = 8;
 	//Sptr->HeroY = 24;
 
@@ -159,11 +190,12 @@ void battleInit(scene* Sptr)
 	int wildPoke = 0;
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
-	wildPoke = 43;
+	//wildPoke = 43;
+	wildPoke = 25;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
-	Sptr->enemyPokeLevel = 5 + ((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
+	Sptr->enemyPokeLevel = 1;// + ((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	//Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 체력은 레벨의 30배로 설정.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
 	pokemonPrint(Sptr->enemyPokeNum, false);
@@ -264,7 +296,8 @@ void battleMenu(scene* Sptr)
 					if (skillNum <= 0)
 					{
 						setColor(10, 0);
-						printf(">> 메뉴로 돌아갑니다.\n"); break;
+						printf(">> 메뉴로 돌아갑니다.\n"); 
+						break;
 					}
 				}
 				damage = useSkill(Sptr, skillNum, myturn);
@@ -274,6 +307,32 @@ void battleMenu(scene* Sptr)
 				Sleep(2000);
 				break;
 			case '2':   //교체한다.
+				system("cls");
+				int currpokeNum;
+				int changePokeNum;
+				char pokeName[30];
+				for (int i = 0; i < 6; i++) {
+					currpokeNum = Sptr->myPokeNum[i];
+					if (currpokeNum != 0) {
+						pokeNameFind(Sptr->myPokeNum[i], pokeName);
+						printf("%d : %s\n", i+1, pokeName);
+					}
+					else if (currpokeNum == 0) {
+						printf("%d : 포켓몬이 없다.\n", i+1);
+					}
+				}
+				printf("\n>> 무슨 포켓몬으로 교체하시겠습니까? : ");
+				scanf("%d", &changePokeNum);
+				Sptr->currPokeIndex = changePokeNum-1;
+				printf("\n\n%s!! 돌아와!!\n", Sptr->currPokeName);
+				Sleep(1000);
+				pokeNameFind(Sptr->myPokeNum[changePokeNum-1], pokeName);
+				printf("\n\n가라!! %s!!", pokeName);
+				strcpy(Sptr->currPokeName, pokeName);
+				//Sptr->myPokeLevel ->myPokeLevel[Sptr->currPokeIndex];
+				//Sptr->
+				
+				Sleep(2000);
 				break;
 			case '4':   //도망간다.
 				setColor(10, 0);
