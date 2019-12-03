@@ -91,12 +91,15 @@ int main()
 	//pokemonPrint(25,false);   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
 
 	system("mode con cols=120 lines=120");
+
+	//start_story();
 	//titleDraw();
 
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 2;
+	Sptr->sceneNum = 3;
+
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -1299,6 +1302,22 @@ void sceneMap(scene* Sptr) {
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
 	}
+	case 3:
+	{
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			Sptr->Coor[0][i] = '^';
+			Sptr->Coor[49][i] = '^';
+			Sptr->Coor[i][0] = '^';
+			Sptr->Coor[i][49] = '^';
+		}
+		for (i = 1; i < FIELD_SIZE - 1; i++)
+			for (j = 1; j < FIELD_SIZE - 1; j++)
+				Sptr->Coor[i][j] = ' ';
+		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		break;
+	}
+
 
 
 	}//Switch end
@@ -1514,6 +1533,45 @@ void scenePrint(scene* Sptr)
 			}
 			printf("\n");
 			setColor(15, 0);
+		}
+	}
+	else if (Sptr->sceneNum == 3) 
+	{
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < FIELD_SIZE; j++)
+			{
+				switch (Sptr->Coor[i][j])
+				{
+				case '^' :
+					setColor(2, 15);
+					break;
+				
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
+			}
+			printf("\n");
+			setColor(15, 0);
+
 		}
 	}
 
