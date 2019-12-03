@@ -10,6 +10,7 @@
 // Map Size
 #define LAB_VERTICAL_FIELD_SIZE 21
 #define FIELD_SIZE 50
+#define ROOM_SIZE 20
 
 // Key Input Numbers
 #define UP 0
@@ -38,12 +39,12 @@
 #define 할퀴기		10
 
 struct Scene {
-	int sceneNum;				// 맵의 번호
+	int sceneNum;            // 맵의 번호
 	char Coor[FIELD_SIZE][FIELD_SIZE];
-	
+
 	int HeroX;
 	int HeroY;
-	int myPokeNum[6] = { 0 };   // 갖고 있는 포켓몬의 도감번호
+	int myPokeNum[6] = { 0, };  // 갖고 있는 포켓몬의 도감번호
 	int myPokeLevel[6];			// 갖고 있는 포켓몬의 레벨
 	int myPokeHealth[6];		// 갖고 있는 포켓몬의 체력
 	int myPokeExp[6];			// 갖고 있는 포켓몬의 경험치
@@ -65,20 +66,21 @@ typedef struct Scene scene;
 
 
 // ** Functions
-void pokeNameFind(int, char *);	// Param1: pokeNum, Param2: pokeName(추출한 포켓몬 이름이 저장될 문자열 공간의 주소)
-void pokemonPrint(int, int);	// Param1: pokeNum, Param2: onlyHead(머리부분만 출력할 것이면 1 아니면 0)
+void pokeNameFind(int, char*);   // Param1: pokeNum, Param2: pokeName(추출한 포켓몬 이름이 저장될 문자열 공간의 주소)
+void pokemonPrint(int, int);   // Param1: pokeNum, Param2: onlyHead(머리부분만 출력할 것이면 1 아니면 0)
 //
+int findAlivePokeIndex(scene*);
 void battleInit(scene*);
 void battleMenu(scene*);
 int fightMenu(scene*, int);
 //
-void skillPrint(const char *);	// Param1: 파일(경로) 이름
+void skillPrint(const char*);   // Param1: 파일(경로) 이름
 int pokeVal(int, const char*);
-float typeRel(int , int);		// typeRelativity(타입 관계)의 약자, Param1: 공격기술의 번호(techNum), Param2: 공격을 받는 포켓몬 번호(pokeNum)
-int useSkill(scene*, int, int);	// Param2: skillNum
+float typeRel(int, int);      // typeRelativity(타입 관계)의 약자, Param1: 공격기술의 번호(techNum), Param2: 공격을 받는 포켓몬 번호(pokeNum)
+int useSkill(scene*, int, int);   // Param2: skillNum
 //
-void checkEvent(scene *);
-void teleportMap(scene *, int, int);	// Param 2: 이동하기 전의 sceneNum, Param 3: 이동할 sceneNum
+void checkEvent(scene*);
+void teleportMap(scene*, int, int);   // Param 2: 이동하기 전의 sceneNum, Param 3: 이동할 sceneNum
 void sceneMap(scene*);
 void scenePrint(scene*);
 void move(scene*, int);
@@ -87,20 +89,26 @@ int isColi(scene*, int, int);
 int keyControl();
 void setColor(int, int);
 void titleDraw();
+void start_story();
 
 
 /* MAIN Function */
 int main()
 {
 	//pokemonPrint(25,false);   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
+
 	Sleep(3000);
+
 	system("mode con cols=120 lines=120");
+	
+	// 향후 주석해제
 	//titleDraw();
+	//start_story();
 
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 0;
+	Sptr->sceneNum = 2;
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeLevel[0] = 5;
@@ -113,6 +121,8 @@ int main()
 	Sptr->HeroY = 12;
 	//Sptr->HeroX = 8;
 	//Sptr->HeroY = 24;
+
+	//start_story();
 
 	sceneMap(Sptr);
 	scenePrint(Sptr);
@@ -147,31 +157,47 @@ int main()
 	}
 
 	free(Sptr);
-	
+
 	return 0;
 }
 
+int findAlivePokeIndex(scene* Sptr)
+{
+	for (int i = 0; i < 6; i++)
+	{
+		if (Sptr->myPokeHealth[i] > 0)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+}
 
 void battleInit(scene* Sptr)
 {
 	char file_name[10];
 	int wildPoke = 0;
+
+	// 배틀에 처음으로 등장할 나의 포켓몬 정하기
+	Sptr->currPokeIndex = findAlivePokeIndex(Sptr);
+
+	// 배틀에 등장할 야생 포켓몬 정하기
 	srand((unsigned int)time(NULL));
 	//wildPoke = rand() % 116 + 1;
 	wildPoke = 16;
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
-	Sptr->enemyPokeLevel = 5+((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
+	Sptr->enemyPokeLevel = 5 + ((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	//Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * 30;   // 체력은 레벨의 30배로 설정.
-	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;	// 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
-	pokemonPrint(Sptr->enemyPokeNum, false); 
+	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
+	pokemonPrint(Sptr->enemyPokeNum, false);
 	battleMenu(Sptr);
 }
 
 void battleMenu(scene* Sptr)
 {
-	Sptr->currPokeIndex = 0;
 	int myturn = 1;   // 0: 상대 턴 , 1: 나의 턴
 	int skillNum = 0;
 	int damage = 0;
@@ -179,13 +205,12 @@ void battleMenu(scene* Sptr)
 	while (1)
 	{
 		// 배틀 메뉴 종료 조건
-		int deadPoke = 0;
-		for (int i = 0; i < 6; i++)
+		int first_alive_poke = findAlivePokeIndex(Sptr);// findAlivePokeIndex()함수는 살아있는 포켓몬이 있으면 0~5의 int를 반환하고 아니라면 -1을 반환한다.
+		if (first_alive_poke >= 0)						// 포켓몬이 살아있다면. 
 		{
-			if (Sptr->myPokeHealth[i] <= 0)
-				deadPoke++;
+			Sptr->currPokeIndex = first_alive_poke;		// 출전할 포켓몬을 6마리 포켓몬의 배열중 가장 먼저 찾은 살아있는 포켓몬으로 정한다.
 		}
-		if (deadPoke == 6)
+		else											// 포켓몬이 모두 쓰러졌다면.
 		{
 			system("cls");
 			setColor(10, 0);
@@ -194,20 +219,22 @@ void battleMenu(scene* Sptr)
 			Sleep(3000);
 			break;
 		}
+
 		if (Sptr->enemyPokeHealth <= 0)
 		{
 			setColor(10, 0);
 			printf(">> 상대 포켓몬이 쓰러졌다!\n");
 			Sleep(1500);
 			Sptr->myPokeExp[Sptr->currPokeIndex] = Sptr->myPokeExp[Sptr->currPokeIndex] + (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel);
-			//얻는 경험치는 상대포켓몬 레벨**3으로 설정
+			// 얻는 경험치는 상대포켓몬 레벨**3으로 설정
+			// 상대를 처치한 포켓몬(상대 포켓몬이 쓰러기지 직전에 공격한 나의 포켓몬)만이 경험치를 획득한다.
 			printf(">> 경험치가 %d만큼 증가했다!\n", (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel) * (Sptr->enemyPokeLevel));
 			Sleep(1500);
-			if (Sptr->myPokeExp[0] >= Sptr->LevelUpExp[0]) {
-				while (Sptr->myPokeExp[0] >= Sptr->LevelUpExp[0]){
-					Sptr->myPokeExp[0] = Sptr->myPokeExp[0] - Sptr->LevelUpExp[0];
-					Sptr->myPokeLevel[0] += 1;
-					Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
+			if (Sptr->myPokeExp[Sptr->currPokeIndex] >= Sptr->LevelUpExp[Sptr->currPokeIndex]) {
+				while (Sptr->myPokeExp[Sptr->currPokeIndex] >= Sptr->LevelUpExp[Sptr->currPokeIndex]) {
+					Sptr->myPokeExp[Sptr->currPokeIndex] = Sptr->myPokeExp[Sptr->currPokeIndex] - Sptr->LevelUpExp[Sptr->currPokeIndex];
+					Sptr->myPokeLevel[Sptr->currPokeIndex] += 1;
+					Sptr->LevelUpExp[Sptr->currPokeIndex] = (Sptr->myPokeLevel[Sptr->currPokeIndex] + 1) * (Sptr->myPokeLevel[Sptr->currPokeIndex] + 1) * (Sptr->myPokeLevel[Sptr->currPokeIndex] + 1);
 					printf(">> 레벨이 1 증가했다!\n");
 					Sleep(1500);
 				}
@@ -215,7 +242,7 @@ void battleMenu(scene* Sptr)
 				Sleep(2000);
 
 			}
-			
+
 			break;
 		}
 
@@ -225,16 +252,16 @@ void battleMenu(scene* Sptr)
 		if (myturn == true)
 		{
 			// 포켓몬 상태 출력
-			setColor(10,0);
+			setColor(10, 0);
 			printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
 			printf("상대 포켓몬%s)) LEVEL: %d | HP: %d\n", Sptr->enemyPokeName, Sptr->enemyPokeLevel, Sptr->enemyPokeHealth);
-			for (int h = 0; h < Sptr->enemyPokeHealth / 5; h++)	// HP 바 출력
+			for (int h = 0; h < Sptr->enemyPokeHealth / 5; h++)   // HP 바 출력
 			{
-				setColor(9,10);
+				setColor(9, 10);
 				printf("]]");
 			} setColor(10, 0); printf("\n");
 			printf("  내 포켓몬:%s)) LEVEL: %d | HP: %d | EXP : %d/%d\n", Sptr->currPokeName, Sptr->myPokeLevel[Sptr->currPokeIndex], Sptr->myPokeHealth[Sptr->currPokeIndex], Sptr->myPokeExp[Sptr->currPokeIndex], Sptr->LevelUpExp[Sptr->currPokeIndex]);
-			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokeIndex] / 5; h++)	// HP 바 출력 
+			for (int h = 0; h < Sptr->myPokeHealth[Sptr->currPokeIndex] / 5; h++)   // HP 바 출력 
 			{
 				setColor(9, 10);
 				printf("]]");
@@ -262,7 +289,7 @@ void battleMenu(scene* Sptr)
 					skillNum = fightMenu(Sptr, myturn);
 					if (skillNum <= 0)
 					{
-						setColor(10,0);
+						setColor(10, 0);
 						printf(">> 메뉴로 돌아갑니다.\n"); break;
 					}
 				}
@@ -274,13 +301,15 @@ void battleMenu(scene* Sptr)
 				break;
 			case '2':   //교체한다.
 				break;
+			case '3':	//몬스터볼.
+				break;
 			case '4':   //도망간다.
-				setColor(10,0);
+				setColor(10, 0);
 				printf(">> 도망쳤다.!\n");
 				Sleep(1000);
 				return;
 			default:
-				setColor(10,0);
+				setColor(10, 0);
 				printf(">> 그러한 선택지가 없습니다.\n");
 			}
 		}
@@ -303,7 +332,7 @@ void battleMenu(scene* Sptr)
 		else if (!myturn)
 			myturn++;
 	}
-	setColor(10,0);
+	setColor(10, 0);
 	printf(">> 배틀 메뉴 종료. 맵으로 돌아갑니다.\n");
 }
 
@@ -370,7 +399,7 @@ int fightMenu(scene* Sptr, int myturn)
 		{
 			srand((unsigned int)time(NULL));
 			temp = (char)(rand() % 4 + 1 + 48);
-			setColor(10,0);
+			setColor(10, 0);
 			printf(">> 상대 포켓몬(%s)이 (%c)를 선택했다!\n", Sptr->enemyPokeName, temp);
 			pokemonPrint(Sptr->enemyPokeNum, 1);
 			Sleep(2000);
@@ -422,7 +451,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 거품광선;
 			break;
 		case '4':
-			skillNum = 몸통박치기;
+			skillNum = 물의파동;
 			break;
 		default:
 			skillNum = 0;
@@ -457,7 +486,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 거품광선;
 			break;
 		case '4':
-			skillNum = 몸통박치기;	// 추후 변경
+			skillNum = 몸통박치기;   // 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -527,7 +556,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 거품광선;
 			break;
 		case '4':
-			skillNum = 몸통박치기;	// 추후 변경
+			skillNum = 몸통박치기;   // 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -535,7 +564,7 @@ int fightMenu(scene* Sptr, int myturn)
 		}
 		break;
 	case 25: //피카츄
-		printf("1.할퀴기 2.몸통박치기	 3.번개  4.전자포\n\n");
+		printf("1.할퀴기 2.몸통박치기    3.번개  4.전자포\n\n");
 		if (myturn)
 		{
 			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
@@ -562,7 +591,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 번개;
 			break;
 		case '4':
-			skillNum = 전자포;	// 추후 변경
+			skillNum = 전자포;   // 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -570,7 +599,7 @@ int fightMenu(scene* Sptr, int myturn)
 		}
 		break;
 	case 39: //푸린
-		printf("1.할퀴기 2.몸통박치기	 3.번개  4.전자포\n\n");
+		printf("1.할퀴기 2.몸통박치기    3.번개  4.전자포\n\n");
 		if (myturn)
 		{
 			temp = getch(); pokemonPrint(Sptr->myPokeNum[Sptr->currPokeIndex], 1);
@@ -597,7 +626,7 @@ int fightMenu(scene* Sptr, int myturn)
 			skillNum = 번개;
 			break;
 		case '4':
-			skillNum = 전자포;	// 추후 변경
+			skillNum = 전자포;   // 추후 변경
 			break;
 		default:
 			skillNum = 0;
@@ -643,7 +672,7 @@ int fightMenu(scene* Sptr, int myturn)
 	return skillNum;
 }
 
-void skillPrint(const char * path)
+void skillPrint(const char* path)
 {
 	char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
 	strcpy(name_tmp, path);
@@ -797,43 +826,43 @@ int pokeVal(int pokeNum, const char* keyword)
 float typeRel(int techNum, int victimNum)
 {
 	/*
-	0:노말  1:불꽃    2:물      3:풀    4:전기    5:얼음 
-	6:격투  7:독      8:땅      9:비행 10:에스퍼 11:벌레 
+	0:노말  1:불꽃    2:물      3:풀    4:전기    5:얼음
+	6:격투  7:독      8:땅      9:비행 10:에스퍼 11:벌레
 	12:바위 13:고스트 14:드래곤 15:악   16:강철  17:페어리
 	*/
 	float type_matrix[18][18] = {
-	{1,1,1,1,1,1,1,1,1,1,1,0.5,0,1,1,0.5,1},			// 노말
-	{1,0.5,0.5,2,1,2,1,1,1,1,1,2,0.5,1,0.5,1,2,1},		// 불꽃
-	{1,2,0.5,0.5,1,1,1,1,2,1,1,1,2,1,0.5,1,1,1},		// 물
+	{1,1,1,1,1,1,1,1,1,1,1,0.5,0,1,1,0.5,1},         // 노말
+	{1,0.5,0.5,2,1,2,1,1,1,1,1,2,0.5,1,0.5,1,2,1},      // 불꽃
+	{1,2,0.5,0.5,1,1,1,1,2,1,1,1,2,1,0.5,1,1,1},      // 물
 	{1,0.5,2,0.5,1,1,1,0.5,2,0.5,1,0.5,2,1,0.5,1,0.5,1},// 풀
-	{1,1,2,0.5,0.5,1,1,1,0,2,1,1,1,1,0.5,1,1,1},		// 전기
-	{1,0.5,0.5,2,1,0.5,1,1,2,2,1,1,1,1,2,1,0.5,1},		// 얼음
-	{2,1,1,1,1,2,1,0.5,1,0.5,0.5,0.5,2,0,1,2,2,0.5},	// 격투
-	{1,1,1,2,1,1,1,0.5,0.5,1,1,1,0.5,0.5,1,1,0,2},		// 독
-	{1,2,1,0.5,2,1,1,2,1,0,1,0.5,2,1,1,1,2,1},			// 땅
-	{1,1,1,2,0.5,1,2,1,1,1,1,2,0.5,1,1,1,0.5,1},		// 비행
-	{1,1,1,1,1,1,2,2,1,1,0.5,1,1,1,1,0,0.5,1},			// 에스퍼
+	{1,1,2,0.5,0.5,1,1,1,0,2,1,1,1,1,0.5,1,1,1},      // 전기
+	{1,0.5,0.5,2,1,0.5,1,1,2,2,1,1,1,1,2,1,0.5,1},      // 얼음
+	{2,1,1,1,1,2,1,0.5,1,0.5,0.5,0.5,2,0,1,2,2,0.5},   // 격투
+	{1,1,1,2,1,1,1,0.5,0.5,1,1,1,0.5,0.5,1,1,0,2},      // 독
+	{1,2,1,0.5,2,1,1,2,1,0,1,0.5,2,1,1,1,2,1},         // 땅
+	{1,1,1,2,0.5,1,2,1,1,1,1,2,0.5,1,1,1,0.5,1},      // 비행
+	{1,1,1,1,1,1,2,2,1,1,0.5,1,1,1,1,0,0.5,1},         // 에스퍼
 	{1,0.5,1,2,1,1,0.5,0.5,1,0.5,2,1,1,0.5,1,2,0.5,0.5},// 벌레
-	{1,2,1,1,1,2,0.5,1,0.5,2,1,2,1,1,1,1,0.5,1},		// 바위
-	{0,1,1,1,1,1,1,1,1,1,2,1,1,2,1,0.5,1,1},			// 고스트
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,0.5,0},			// 드래곤
-	{1,1,1,1,1,1,0.5,1,1,1,2,1,1,2,1,0.5,1,0.5},		// 악
-	{1,0.5,0.5,1,0.5,2,1,1,1,1,1,1,2,1,1,1,0.5,2},		// 강철
-	{1,0.5,1,1,1,1,2,0.5,1,1,1,1,1,1,2,2,0.5,1}			// 페어리
+	{1,2,1,1,1,2,0.5,1,0.5,2,1,2,1,1,1,1,0.5,1},      // 바위
+	{0,1,1,1,1,1,1,1,1,1,2,1,1,2,1,0.5,1,1},         // 고스트
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,0.5,0},         // 드래곤
+	{1,1,1,1,1,1,0.5,1,1,1,2,1,1,2,1,0.5,1,0.5},      // 악
+	{1,0.5,0.5,1,0.5,2,1,1,1,1,1,1,2,1,1,1,0.5,2},      // 강철
+	{1,0.5,1,1,1,1,2,0.5,1,1,1,1,1,1,2,2,0.5,1}         // 페어리
 	};
 
-	int attack_type=0, victim_type=0;
+	int attack_type = 0, victim_type = 0;
 	attack_type = techVal(techNum, "TYPE");
 	victim_type = pokeVal(victimNum, "TYPE");
 
-	
-	if(type_matrix[attack_type][victim_type] == 1)
+
+	if (type_matrix[attack_type][victim_type] == 1)
 		printf("효과가 평범했다.\n");
 	if (type_matrix[attack_type][victim_type] == 2)
 		printf("효과가 굉장했다!\n");
 	if (type_matrix[attack_type][victim_type] == 0.5)
 		printf("효과가 별로였다...\n");
-	if(type_matrix[attack_type][victim_type] == 0)
+	if (type_matrix[attack_type][victim_type] == 0)
 		printf("효과가 없었다...\n");
 
 	return type_matrix[attack_type][victim_type];
@@ -856,47 +885,47 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		break;
 	case 물의파동:
 		dmg = 60;
-		setColor(9,0);
+		setColor(9, 0);
 		skillPrint("water_WhirlPool.txt");
 		break;
 	case 역린:
 		dmg = 120;
-		setColor(12,0);
+		setColor(12, 0);
 		skillPrint("fire_Sacred_Fire.txt");
 		break;
 	case 전자포:
 		dmg = 120;
-		setColor(14,0);
+		setColor(14, 0);
 		skillPrint("attack_hit_Electric_2.txt");
 		break;
 	case 번개:
 		dmg = 110;
-		setColor(14,0);
+		setColor(14, 0);
 		skillPrint("elec_Thunder.txt");
 		break;
 	case 솔라빔:
 		dmg = 120;
-		setColor(10,0);
+		setColor(10, 0);
 		skillPrint("attack_hit_Grass_3.txt");
 		break;
 	case 잎날가르기:
 		dmg = 55;
-		setColor(10,0);
+		setColor(10, 0);
 		skillPrint("attack_hit_Grass_1.txt");
 		break;
 	case 거품광선:
 		dmg = 65;
-		setColor(9,0);
+		setColor(9, 0);
 		skillPrint("water_Water_Pledge.txt");
 		break;
 	case 화염방사:
 		dmg = 90;
-		setColor(12,0);
+		setColor(12, 0);
 		skillPrint("attack_hit_Fire_3.txt");
 		break;
 	case 불꽃세례:
 		dmg = 40;
-		setColor(12,0);
+		setColor(12, 0);
 		skillPrint("fire_Ember.txt");
 		break;
 	case 몸통박치기:
@@ -906,7 +935,7 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		break;
 	case 덩굴채찍:
 		dmg = 45;
-		setColor(10,0);
+		setColor(10, 0);
 		skillPrint("attack_hit_Grass_1.txt");
 		break;
 	case 날개치기:
@@ -929,16 +958,16 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 	}
 
 	// 데미지 계산 식 구현
-	if (myturn==true)
+	if (myturn == true)
 	{
 		/*
-		dmg = dmg * 
-			pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK")
-			* ((Sptr->myPokeLevel[Sptr->currPokeIndex] * 2/5 + 2)/pokeVal(Sptr->enemyPokeNum, "DEF")/50+2)
-			* 1;*/
+		dmg = dmg *
+		   pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK")
+		   * ((Sptr->myPokeLevel[Sptr->currPokeIndex] * 2/5 + 2)/pokeVal(Sptr->enemyPokeNum, "DEF")/50+2)
+		   * 1;*/
 		dmg = dmg *
 			pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK") / pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "DEF") *
-			(Sptr->myPokeLevel[Sptr->currPokeIndex]+2) / 50 * typeRel(skillNum, Sptr->enemyPokeNum)
+			(Sptr->myPokeLevel[Sptr->currPokeIndex] + 2) / 50 * typeRel(skillNum, Sptr->enemyPokeNum)
 			+ rand() % 5;
 		printf("damage : %d\n", int(dmg));
 	}
@@ -955,17 +984,19 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 
 }
 
-void checkEvent(scene* Sptr)	// This function would be executed when SPACE key pushed.
+void checkEvent(scene* Sptr)   // This function would be executed when SPACE key pushed.
 {
 	switch (Sptr->sceneNum)
 	{
-	case 0:	// 마을0
-		// Check entrance
+	case 0:   // 마을0
+	   // Check entrance
 		if (Sptr->HeroX == 30 && Sptr->HeroY == 24)
 			teleportMap(Sptr, 0, 1);
+		else if (Sptr->HeroX == 7 && Sptr->HeroY == 24)
+			teleportMap(Sptr, 0, 2);
 		break;
-	case 1:	// 연구소
-		// Check entrance
+	case 1:   // 연구소
+	   // Check entrance
 		if ((Sptr->HeroX == 24 && Sptr->HeroY == 19) ||
 			(Sptr->HeroX == 23 && Sptr->HeroY == 19))
 			teleportMap(Sptr, 1, 0);
@@ -1061,6 +1092,10 @@ void checkEvent(scene* Sptr)	// This function would be executed when SPACE key p
 			}
 		}
 		break;
+	case 2:
+		if ((Sptr->HeroX == 10 && Sptr->HeroY == 18) ||
+			(Sptr->HeroX == 9 && Sptr->HeroY == 18))
+			teleportMap(Sptr, 2, 0);
 	}
 }
 
@@ -1079,11 +1114,23 @@ void teleportMap(scene* Sptr, int sceneNum0, int sceneNum1)
 		Sptr->HeroY = 24;
 		Sptr->sceneNum = 0;
 	}
+	else if (sceneNum0 == 2 && sceneNum1 == 0)
+	{
+		Sptr->HeroX = 7;
+		Sptr->HeroY = 24;
+		Sptr->sceneNum = 0;
+	}
+	else if (sceneNum0 == 0 && sceneNum1 == 2)
+	{
+		Sptr->HeroX = 10;
+		Sptr->HeroY = 18;
+		Sptr->sceneNum = 2;
+	}
+
 }
 
 /* Draw/Print Functions */
-void sceneMap(scene* Sptr)
-{
+void sceneMap(scene* Sptr) {
 	printf(">> Map : %d\n", Sptr->sceneNum);
 	int i = 0, j = 0, k = 0;
 	switch (Sptr->sceneNum)
@@ -1128,13 +1175,13 @@ void sceneMap(scene* Sptr)
 			Sptr->Coor[34][j] = '=';
 		for (i = 32; i <= 34; i++)
 			Sptr->Coor[i][41] = '=';
-		for (j = 42; j < FIELD_SIZE-1; j++)
+		for (j = 42; j < FIELD_SIZE - 1; j++)
 			Sptr->Coor[32][j] = '=';
 
-		for (j = 1; j < FIELD_SIZE-1; j++)
+		for (j = 1; j < FIELD_SIZE - 1; j++)
 		{
 			int water_cnt = 0;
-			for (i = 31; i < FIELD_SIZE-1; i++)
+			for (i = 31; i < FIELD_SIZE - 1; i++)
 				if (Sptr->Coor[i][j] == '=')
 				{
 					++water_cnt;
@@ -1159,7 +1206,7 @@ void sceneMap(scene* Sptr)
 		for (j = 3; j < 10; j++)
 			Sptr->Coor[20][j] = '=';
 		Sptr->Coor[19][4] = 'H'; Sptr->Coor[19][5] = 'O'; Sptr->Coor[19][6] = 'U'; Sptr->Coor[19][7] = 'S'; Sptr->Coor[19][8] = 'E';
-		Sptr->Coor[22][7] = '['; Sptr->Coor[22][8] = ']';
+		Sptr->Coor[22][6] = '['; Sptr->Coor[22][8] = ']';
 		for (j = 3; j < 10; j++)
 			Sptr->Coor[23][j] = '=';
 
@@ -1268,9 +1315,58 @@ void sceneMap(scene* Sptr)
 			for (int j = 35; j <= 45; j++)
 				Sptr->Coor[i][j] = 'E';
 		}
-
+		
+		//HERO
+		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		break;
 	}
-		  Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+	case 2: {
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			Sptr->Coor[0][i] = '|';
+			Sptr->Coor[18][i] = '|';
+			Sptr->Coor[19][i] = '|';
+			Sptr->Coor[i][0] = '|';
+			Sptr->Coor[i][19] = '|';
+		}
+		for (i = 1; i < ROOM_SIZE - 2; i++)
+			for (j = 1; j < ROOM_SIZE - 1; j++)
+				Sptr->Coor[i][j] = ' ';
+
+		//bed
+		for (i = 2; i < 5; i++) {
+			for (j = 2; j < 7; j++) {
+				Sptr->Coor[2][i] = 'b';
+				Sptr->Coor[j][i] = 'r';
+			}
+		}
+
+		//door open
+		Sptr->Coor[18][10] = ' ';
+		Sptr->Coor[18][9] = ' ';
+
+		for (i = 12; i < 17; i++)
+			Sptr->Coor[3][i] = 'T';
+		for (j = 12; j <= 17; j += 2)
+			Sptr->Coor[4][j] = '|';
+
+		//toile
+		for (int i = 1; i < 6; i++)
+		{
+			Sptr->Coor[13][i] = '|';
+		}
+		for (int i = 13; i < 18; i++)
+		{
+			Sptr->Coor[i][5] = '|';
+		}
+		Sptr->Coor[13][3] = ' ';
+		Sptr->Coor[17][3] = 'w';
+
+		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
+		break;
+	}
+
+
 	}//Switch end
 
 }
@@ -1326,74 +1422,173 @@ void scenePrint(scene* Sptr)
 			setColor(15, 0);
 		}
 	}
-	else if(Sptr->sceneNum == 1) {
-			system("cls");
-			int i = 0;
-			printf("   ");
-			for (i = 0; i < FIELD_SIZE; i++)
+	else if (Sptr->sceneNum == 1) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < FIELD_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < FIELD_SIZE; j++)
 			{
-				if (i < 9)
-					printf("%d ", i);
-				else
-					printf("%d", i);
+				switch (Sptr->Coor[i][j])
+				{
+				case 'T':
+					setColor(14, 14);
+					break;
+				case '|':
+					setColor(14, 0);
+					break;
+				case 'b':
+					setColor(4, 4);
+					break;
+				case 'p':
+					setColor(15, 15);
+					break;
+				case 'm':
+					setColor(1, 1);
+					break;
+				case 'c':
+					setColor(23, 23);
+					break;
+				case 'E':
+					setColor(0, 8);
+					break;
+				case 'A':
+					setColor(2, 2);
+					break;
+				case '^':
+					setColor(7, 7);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
 			}
 			printf("\n");
-			for (i = 0; i < LAB_VERTICAL_FIELD_SIZE; i++)
-			{
-				if (i <= 9)
-					printf("%1d: ", i);
-				else
-					printf("%1d:", i);
-				for (int j = 0; j < FIELD_SIZE; j++)
-				{
-					switch (Sptr->Coor[i][j])
-					{
-					case 'T':
-						setColor(14, 14);
-						break;
-					case '|':
-						setColor(14, 0);
-						break;
-					case 'b':
-						setColor(4, 4);
-						break;
-					case 'p':
-						setColor(15, 15);
-						break;
-					case 'm':
-						setColor(1,1);
-						break;
-					case 'c':
-						setColor(23, 23);
-						break;
-					case 'E':
-						setColor(0,8);
-						break;
-					case 'A':
-						setColor(2, 2);
-						break;
-					case '^':
-						setColor(7,7);
-						break;
-					default:
-						setColor(15, 0);
-						break;
-					}
+			setColor(15, 0);
+		}
 
-					printf("%c ", Sptr->Coor[i][j]);
-				}
-				printf("\n");
-				setColor(15,0);
-			}
-		
 	}
+	else if (Sptr->sceneNum == 2) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < ROOM_SIZE; j++)
+			{
+				switch (Sptr->Coor[i][j])
+				{
+				case '-':
+					setColor(8, 8);
+					break;
+				case '|':
+					setColor(8, 8);
+					break;
+				case 'b':
+					setColor(15, 15);
+					break;
+				case 'r':
+					setColor(4, 4);
+					break;
+				case 'T':
+					setColor(6, 6);
+					break;
+				case 'w':
+					setColor(11, 11);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
+			}
+			printf("\n");
+			setColor(15, 0);
+		}
+	}
+	else if (Sptr->sceneNum == 2) {
+		system("cls");
+		int i = 0;
+		printf("   ");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i < 9)
+				printf("%d ", i);
+			else
+				printf("%d", i);
+		}
+		printf("\n");
+		for (i = 0; i < ROOM_SIZE; i++)
+		{
+			if (i <= 9)
+				printf("%1d: ", i);
+			else
+				printf("%1d:", i);
+			for (int j = 0; j < ROOM_SIZE; j++)
+			{
+				switch (Sptr->Coor[i][j])
+				{
+				case '-':
+					setColor(8, 8);
+					break;
+				case '|':
+					setColor(8, 8);
+					break;
+				case 'b':
+					setColor(15, 15);
+					break;
+				case 'r':
+					setColor(4, 4);
+					break;
+				case 'T':
+					setColor(6, 6);
+					break;
+				default:
+					setColor(15, 0);
+					break;
+				}
+
+				printf("%c ", Sptr->Coor[i][j]);
+			}
+			printf("\n");
+			setColor(15, 0);
+		}
+	}
+
 }
 
-void move(scene* Sptr, int keyInput)
+void move(scene * Sptr, int keyInput)
 {
 
-	switch (keyInput)
-	{
+	switch (keyInput) {
 	case UP:
 		if (!(isColi(Sptr, (Sptr->HeroX), (Sptr->HeroY) - 1)))
 			Sptr->HeroY = Sptr->HeroY - 1;
@@ -1418,13 +1613,14 @@ void move(scene* Sptr, int keyInput)
 		else
 			printf("Colision detected!\n");
 		break;
+
 	default:
 		printf("move() err : can't understand keyinput : %d\n", keyInput);
 	}
 	printf("Hero : (%d, %d)\n", Sptr->HeroX, Sptr->HeroY);
 }
 
-int isColi(scene* Sptr, int x, int y)
+int isColi(scene * Sptr, int x, int y)
 {
 	if (Sptr->Coor[y][x] == '^' ||
 		Sptr->Coor[y][x] == '|' ||
@@ -1436,7 +1632,7 @@ int isColi(scene* Sptr, int x, int y)
 		Sptr->Coor[y][x] == 'p' ||
 		Sptr->Coor[y][x] == 'm' ||
 		Sptr->Coor[y][x] == 'c' ||
-		Sptr->Coor[y][x] == 'P'	// Professor
+		Sptr->Coor[y][x] == 'P'   // Professor
 		)
 	{
 		return 1;
@@ -1446,10 +1642,8 @@ int isColi(scene* Sptr, int x, int y)
 		srand((unsigned int)time(NULL));
 		int val = 0;
 		val = rand() % 100 + 1;
-		if (val <= 45)
-		{
+		if (val <= 45 && findAlivePokeIndex(Sptr) >= 0)
 			battleInit(Sptr);
-		}
 		return 0;
 	}
 	else
@@ -1458,520 +1652,548 @@ int isColi(scene* Sptr, int x, int y)
 	}
 }
 
-void pokeNameFind(int pokeNum, char *pokeName)
-{
-	HANDLE fileSearch;
-	WIN32_FIND_DATA wfd;
-	CString musiccount;
-	CString findFirstFileName;
-	CString findSecondFileName;
-
-	char find_path[20] = "";
-	char found_path[40] = "";
-	
-	find_path[0] = (char)(pokeNum / 100 + 48);
-	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
-	find_path[2] = (char)(pokeNum % 10 + 48);
-	find_path[3] = '_';
-	find_path[4] = '*';
-	find_path[5] = '\0';
-	
-	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
-	musiccount.Format(_T((const char*)find_path));
-
-	fileSearch = FindFirstFile(musiccount, &wfd);
-	if (fileSearch != INVALID_HANDLE_VALUE)
+void pokeNameFind(int pokeNum, char* pokeName)
 	{
-		findFirstFileName.Format(_T("%s"), wfd.cFileName);
-		strcpy(found_path, wfd.cFileName);
-		FindClose(fileSearch);
-	}
-	char pokemon_name[30];
-	int i = 0;
-	while (1)
-	{
-		if (i > 3)
+		HANDLE fileSearch;
+		WIN32_FIND_DATA wfd;
+		CString musiccount;
+		CString findFirstFileName;
+		CString findSecondFileName;
+
+		char find_path[20] = "";
+		char found_path[40] = "";
+
+		find_path[0] = (char)(pokeNum / 100 + 48);
+		find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+		find_path[2] = (char)(pokeNum % 10 + 48);
+		find_path[3] = '_';
+		find_path[4] = '*';
+		find_path[5] = '\0';
+
+		//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
+		musiccount.Format(_T((const char*)find_path));
+
+		fileSearch = FindFirstFile(musiccount, &wfd);
+		if (fileSearch != INVALID_HANDLE_VALUE)
 		{
-			if (found_path[i] == '.')
-			{
-				pokemon_name[i - 4] = '\0';
-				break;
-			}
-			else
-			{
-				pokemon_name[i - 4] = found_path[i];
-			}
+			findFirstFileName.Format(_T("%s"), wfd.cFileName);
+			strcpy(found_path, wfd.cFileName);
+			FindClose(fileSearch);
 		}
-		i++;
+		char pokemon_name[30];
+		int i = 0;
+		while (1)
+		{
+			if (i > 3)
+			{
+				if (found_path[i] == '.')
+				{
+					pokemon_name[i - 4] = '\0';
+					break;
+				}
+				else
+				{
+					pokemon_name[i - 4] = found_path[i];
+				}
+			}
+			i++;
+		}
+		strcpy(pokeName, (const char*)pokemon_name);
 	}
-	strcpy(pokeName, (const char*)pokemon_name);
-}
 
 void pokemonPrint(int pokeNum, int onlyHead)
-{
-	HANDLE fileSearch;
-	WIN32_FIND_DATA wfd;
-	CString musiccount;
-	CString findFirstFileName;
-	CString findSecondFileName;
-	char find_path[20] = "";
-	char found_path[40] = "";
+	{
+		HANDLE fileSearch;
+		WIN32_FIND_DATA wfd;
+		CString musiccount;
+		CString findFirstFileName;
+		CString findSecondFileName;
+		char find_path[20] = "";
+		char found_path[40] = "";
 
-	find_path[0] = (char)(pokeNum / 100 + 48);
-	find_path[1] = (char)((pokeNum / 10) % 10 + 48);
-	find_path[2] = (char)(pokeNum % 10 + 48);
-	find_path[3] = '_';
-	find_path[4] = '*';
-	if (onlyHead == false)
-	{
-		find_path[5] = '\0';
-	}
-	else if (onlyHead == true)
-	{
-		find_path[5] = '_'; find_path[6] = 'F'; find_path[7] = 'a'; find_path[8] = 'c'; find_path[9] = 'e';
-		find_path[10] = '*'; find_path[11] = '\0';
-	}
-
-	//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
-	musiccount.Format(_T((const char*)find_path));
-	fileSearch = FindFirstFile(musiccount, &wfd);
-	if (fileSearch != INVALID_HANDLE_VALUE)
-	{
-		findFirstFileName.Format(_T("%s"), wfd.cFileName);
-		strcpy(found_path, wfd.cFileName);
-		FindClose(fileSearch);
-		//printf("%s!\n", found_path);
-	}
-	char pokemon_name[30];
-	int i = 0;
-	while (1)
-	{
-		if (i > 3)
+		find_path[0] = (char)(pokeNum / 100 + 48);
+		find_path[1] = (char)((pokeNum / 10) % 10 + 48);
+		find_path[2] = (char)(pokeNum % 10 + 48);
+		find_path[3] = '_';
+		find_path[4] = '*';
+		if (onlyHead == false)
 		{
-			if (found_path[i] == '.'|| found_path[i] == '_')
-			{
-				pokemon_name[i - 4] = '\0';
-				break;
-			}
-			else
-			{
-				pokemon_name[i - 4] = found_path[i];
-			}
-		}
-		i++;
-	}
-	printf("pokemon_name : %s\n", pokemon_name);
-
-	char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
-	name_tmp = found_path;
-	FILE* fp = fopen(name_tmp, "rt");
-	if (fp == NULL) {
-		printf("파일 오픈 실패 !\n");
-	}
-	while (1) {
-		ch = fgetc(fp);
-		if (ch == EOF)
-			break;
-		
-		if(onlyHead==false)					// 전체를 출력할 경우(머리X)
-		{
-			switch (pokeNum)
-			{
-			case 1:  //이상해씨
-				switch (ch)
-				{
-				case '@':case '#':case '%':case ',':case ';':case ':':
-					setColor(0, 0);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case 'S':case '?':
-					setColor(2, 2);
-					break;
-				case '+':
-					setColor(11, 11);
-					break;
-				case '*':
-					setColor(10, 10);
-					break;
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 4:	//파이리
-				switch (ch)
-				{
-				case '.':
-					setColor(15, 15);
-					break;
-				case '@':
-					setColor(0, 0);
-					break;
-				case '%':
-					setColor(2, 2);
-					break;
-				case '?':
-					setColor(4, 4);
-					break;
-				case '*':
-					setColor(4, 4);
-					break;
-				case ',':
-					setColor(14, 14);
-					break;
-				case '+':
-					setColor(12, 12);
-					break;
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 7:  //꼬부기
-				switch (ch)
-				{
-				case '@':case '?':case '#':case '%':
-					setColor(0, 0);
-					break;
-				case ';':case ':':
-					setColor(11, 11);
-					break;
-				case '/':case 'S':
-					setColor(4, 4);
-					break;
-				case '+':
-					setColor(12, 12);
-					break;
-				case '*':
-					setColor(3, 3);
-					break;
-				case '!':
-					setColor(7, 7);
-					break;
-				case '.':case ',':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '-':
-					setColor(5, 5);
-					break;
-				case '=':
-					setColor(14, 14);
-					break;
-					
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 10:  //캐터피
-				switch (ch)
-				{
-				case '@':case '#':case '%':
-					setColor(0, 0);
-					break;
-				case ';':case ':':
-					setColor(11, 11);
-					break;
-				case 'S':
-					setColor(4, 4);
-					break;
-				case '/':
-					setColor(12, 12);
-					break;
-				case '+':
-					setColor(10, 10);
-					break;
-				case '*':
-					setColor(2, 2);
-					break;
-				case '?':case '-':
-					setColor(7, 7);
-					break;
-				case ',':
-					setColor(14, 14);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '=':
-					setColor(14, 14);
-					break;
-
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 16:  //구구
-				switch (ch)
-				{
-				case '@':case '#':
-					setColor(0, 0);
-					break;
-				case ';':case ':':
-					setColor(7, 7);
-					break;
-				case 'S':
-					setColor(12, 12);
-					break;
-				case '/':
-					setColor(12, 12);
-					break;
-				case '+':
-					setColor(2, 2);
-					break;
-				case '*':
-					setColor(2, 2);
-					break;
-				case '?':case '%':
-					setColor(6, 6);
-					break;
-				case ',':
-					setColor(14, 14);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '=':
-					setColor(8, 8);
-					break;
-
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 19:  //꼬렛
-				switch (ch)
-				{
-				case '@':case '#':
-					setColor(0, 0);
-					break;
-				case ';':case ':':
-					setColor(7, 7);
-					break;
-				case 'S':
-					setColor(12, 12);
-					break;
-				case '/':
-					setColor(12, 12);
-					break;
-				case '+':
-					setColor(8, 8);
-					break;
-				case '*':
-					setColor(13, 13);
-					break;
-				case '?':case '%':
-					setColor(5, 5);
-					break;
-				case ',':
-					setColor(14, 14);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '=':
-					setColor(8, 8);
-					break;
-
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 25:  //피카츄
-				switch (ch)
-				{
-				case '@':case '#':case ',':case '?':case '*':case ';':
-					setColor(0, 0);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case ':':
-					setColor(14, 14);
-					break;
-				case '+':
-					setColor(6, 6);
-					break;
-				case 'S':
-					setColor(12, 12);
-					break;
-				case '%':
-					setColor(4, 4);
-					break;
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 39:  //푸린
-				switch (ch)
-				{
-				case '@':
-					setColor(0, 0);
-					break;
-				case ';':case ':':case ',':
-					setColor(7, 7);
-					break;
-				case '%':case 'S':
-					setColor(3, 3);
-					break;
-				case '#':
-					setColor(9, 9);
-					break;
-				case '+':
-					setColor(8, 8);
-					break;
-				case '*':
-					setColor(13, 13);
-					break;
-				case '?':
-					setColor(5, 5);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '=':
-					setColor(8, 8);
-					break;
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			case 43:  //뚜벅초
-				switch (ch)
-				{
-				case '@':case '#':
-					setColor(0, 0);
-					break;
-				case ';':case ':':
-					setColor(7, 7);
-					break;
-				case 'S':
-					setColor(12, 12);
-					break;
-				case '*':
-					setColor(3, 3);
-					break;
-				case '+':
-					setColor(10, 10);
-					break;
-				case '%':
-					setColor(9, 9);
-					break;
-				case '?':
-					setColor(2, 2);
-					break;
-				case ',':
-					setColor(14, 14);
-					break;
-				case '.':
-					setColor(15, 15);
-					break;
-				case '^':
-					setColor(6, 6);
-					break;
-				case '=':
-					setColor(8, 8);
-					break;
-
-				default:
-					setColor(15, 0);
-					break;
-				}
-				break;
-			default:
-				setColor(15,0);
-			}
+			find_path[5] = '\0';
 		}
 		else if (onlyHead == true)
 		{
-			switch (pokeNum)
-			{
-			case 1:
-				setColor(10, 0);
-				break;
-			case 4:
-				setColor(12, 0);
-				break;
-			case 7:
-				setColor(9, 0);
-				break;
-			case 25:
-				setColor(14, 0);
-				break;
-			}
+			find_path[5] = '_'; find_path[6] = 'F'; find_path[7] = 'a'; find_path[8] = 'c'; find_path[9] = 'e';
+			find_path[10] = '*'; find_path[11] = '\0';
 		}
-		printf("%c", ch);
+
+		//musiccount.Format(_T("C:\\Program Files\\TEST\\1_*.*"));
+		musiccount.Format(_T((const char*)find_path));
+		fileSearch = FindFirstFile(musiccount, &wfd);
+		if (fileSearch != INVALID_HANDLE_VALUE)
+		{
+			findFirstFileName.Format(_T("%s"), wfd.cFileName);
+			strcpy(found_path, wfd.cFileName);
+			FindClose(fileSearch);
+			//printf("%s!\n", found_path);
+		}
+		char pokemon_name[30];
+		int i = 0;
+		while (1)
+		{
+			if (i > 3)
+			{
+				if (found_path[i] == '.' || found_path[i] == '_')
+				{
+					pokemon_name[i - 4] = '\0';
+					break;
+				}
+				else
+				{
+					pokemon_name[i - 4] = found_path[i];
+				}
+			}
+			i++;
+		}
+		printf("pokemon_name : %s\n", pokemon_name);
+
+		char ch, * name_tmp = (char*)malloc(sizeof(char) * 10);
+		name_tmp = found_path;
+		FILE* fp = fopen(name_tmp, "rt");
+		if (fp == NULL) {
+			printf("파일 오픈 실패 !\n");
+		}
+		while (1) {
+			ch = fgetc(fp);
+			if (ch == EOF)
+				break;
+
+			if (onlyHead == false)               // 전체를 출력할 경우(머리X)
+			{
+				switch (pokeNum)
+				{
+				case 1:  //이상해씨
+					switch (ch)
+					{
+					case '@':case '#':case '%':case ',':case ';':case ':':
+						setColor(0, 0);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case 'S':case '?':
+						setColor(2, 2);
+						break;
+					case '+':
+						setColor(11, 11);
+						break;
+					case '*':
+						setColor(10, 10);
+						break;
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 4:   //파이리
+					switch (ch)
+					{
+					case '.':
+						setColor(15, 15);
+						break;
+					case '@':
+						setColor(0, 0);
+						break;
+					case '%':
+						setColor(2, 2);
+						break;
+					case '?':
+						setColor(4, 4);
+						break;
+					case '*':
+						setColor(4, 4);
+						break;
+					case ',':
+						setColor(14, 14);
+						break;
+					case '+':
+						setColor(12, 12);
+						break;
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 7:  //꼬부기
+					switch (ch)
+					{
+					case '@':case '?':case '#':case '%':
+						setColor(0, 0);
+						break;
+					case ';':case ':':
+						setColor(11, 11);
+						break;
+					case '/':case 'S':
+						setColor(4, 4);
+						break;
+					case '+':
+						setColor(12, 12);
+						break;
+					case '*':
+						setColor(3, 3);
+						break;
+					case '!':
+						setColor(7, 7);
+						break;
+					case '.':case ',':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '-':
+						setColor(5, 5);
+						break;
+					case '=':
+						setColor(14, 14);
+						break;
+
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 10:  //캐터피
+					switch (ch)
+					{
+					case '@':case '#':case '%':
+						setColor(0, 0);
+						break;
+					case ';':case ':':
+						setColor(11, 11);
+						break;
+					case 'S':
+						setColor(4, 4);
+						break;
+					case '/':
+						setColor(12, 12);
+						break;
+					case '+':
+						setColor(10, 10);
+						break;
+					case '*':
+						setColor(2, 2);
+						break;
+					case '?':case '-':
+						setColor(7, 7);
+						break;
+					case ',':
+						setColor(14, 14);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '=':
+						setColor(14, 14);
+						break;
+
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 16:  //구구
+					switch (ch)
+					{
+					case '@':case '#':
+						setColor(0, 0);
+						break;
+					case ';':case ':':
+						setColor(7, 7);
+						break;
+					case 'S':
+						setColor(12, 12);
+						break;
+					case '/':
+						setColor(12, 12);
+						break;
+					case '+':
+						setColor(2, 2);
+						break;
+					case '*':
+						setColor(2, 2);
+						break;
+					case '?':case '%':
+						setColor(6, 6);
+						break;
+					case ',':
+						setColor(14, 14);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '=':
+						setColor(8, 8);
+						break;
+
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 19:  //꼬렛
+					switch (ch)
+					{
+					case '@':case '#':
+						setColor(0, 0);
+						break;
+					case ';':case ':':
+						setColor(7, 7);
+						break;
+					case 'S':
+						setColor(12, 12);
+						break;
+					case '/':
+						setColor(12, 12);
+						break;
+					case '+':
+						setColor(8, 8);
+						break;
+					case '*':
+						setColor(13, 13);
+						break;
+					case '?':case '%':
+						setColor(5, 5);
+						break;
+					case ',':
+						setColor(14, 14);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '=':
+						setColor(8, 8);
+						break;
+
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 25:  //피카츄
+					switch (ch)
+					{
+					case '@':case '#':case ',':case '?':case '*':case ';':
+						setColor(0, 0);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case ':':
+						setColor(14, 14);
+						break;
+					case '+':
+						setColor(6, 6);
+						break;
+					case 'S':
+						setColor(12, 12);
+						break;
+					case '%':
+						setColor(4, 4);
+						break;
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 39:  //푸린
+					switch (ch)
+					{
+					case '@':
+						setColor(0, 0);
+						break;
+					case ';':case ':':case ',':
+						setColor(7, 7);
+						break;
+					case '%':case 'S':
+						setColor(3, 3);
+						break;
+					case '#':
+						setColor(9, 9);
+						break;
+					case '+':
+						setColor(8, 8);
+						break;
+					case '*':
+						setColor(13, 13);
+						break;
+					case '?':
+						setColor(5, 5);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '=':
+						setColor(8, 8);
+						break;
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				case 43:  //뚜벅초
+					switch (ch)
+					{
+					case '@':case '#':
+						setColor(0, 0);
+						break;
+					case ';':case ':':
+						setColor(7, 7);
+						break;
+					case 'S':
+						setColor(12, 12);
+						break;
+					case '*':
+						setColor(3, 3);
+						break;
+					case '+':
+						setColor(10, 10);
+						break;
+					case '%':
+						setColor(9, 9);
+						break;
+					case '?':
+						setColor(2, 2);
+						break;
+					case ',':
+						setColor(14, 14);
+						break;
+					case '.':
+						setColor(15, 15);
+						break;
+					case '^':
+						setColor(6, 6);
+						break;
+					case '=':
+						setColor(8, 8);
+						break;
+
+					default:
+						setColor(15, 0);
+						break;
+					}
+					break;
+				default:
+					setColor(15, 0);
+				}
+			}
+			else if (onlyHead == true)
+			{
+				switch (pokeNum)
+				{
+				case 1:
+					setColor(10, 0);
+					break;
+				case 4:
+					setColor(12, 0);
+					break;
+				case 7:
+					setColor(9, 0);
+					break;
+				case 25:
+					setColor(14, 0);
+					break;
+				}
+			}
+			printf("%c", ch);
+		}
+		printf("\n");
+		fclose(fp);
+		setColor(15, 0);
 	}
-	printf("\n");
-	fclose(fp);
-	setColor(15, 0);
-}
 
 int keyControl()
-{
-	char temp = getch();
-	if (temp == 'w' || temp == 'W') {
-		return UP;
+	{
+		char temp = getch();
+		if (temp == 'w' || temp == 'W') {
+			return UP;
+		}
+		else if (temp == 'a' || temp == 'A') {
+			return LEFT;
+		}
+		else if (temp == 's' || temp == 'S') {
+			return DOWN;
+		}
+		else if (temp == 'd' || temp == 'D') {
+			return RIGHT;
+		}
+		else if (temp == ' ') { // 스페이스바(공백)이 선택 버튼  
+			return SPACE;
+		}
+		else if (temp == 'q') {
+			return QUIT;
+		}
 	}
-	else if (temp == 'a' || temp == 'A') {
-		return LEFT;
-	}
-	else if (temp == 's' || temp == 'S') {
-		return DOWN;
-	}
-	else if (temp == 'd' || temp == 'D') {
-		return RIGHT;
-	}
-	else if (temp == ' ') { // 스페이스바(공백)이 선택 버튼  
-		return SPACE;
-	}
-	else if (temp == 'q') {
-		return QUIT;
-	}
-}
 
 void setColor(int color, int bgcolor)
-{
-	color &= 0xf;
-	bgcolor &= 0xf;
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
-}
+	{
+		color &= 0xf;
+		bgcolor &= 0xf;
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
+	}
 
 void titleDraw() {
-	printf("\n\n\n\n");
-	printf("  ###################    #######   ## ##      ##########              ##              #########   ###\n");
-	printf("  ##################    ########   ## ##      ###    ###            ######            ########    ###\n");
-	printf("       ##     ##            ###  #### ##      ###    ###           ########           ##          ###\n");
-	printf("        #     #          #####   #### ##      ##########          ##########          ######   ######\n");
-	printf("  ###################     ###      ## ##         ###             #####   #####        ######   ######\n");
-	printf("  ##################      ##       #  #     ###############     #####     ######      ##          ###\n");
-	printf("          ###                  ####         ##############     #####       ######     #######     ###\n");
-	printf("          ###               ####  ####         ##                                     ########    ###\n");
-	printf("######################     ####    ####        ##       #     ####################               ####\n");
-	printf("  ###################     ####       ###       #########      ###################               ####\n");
-	printf("                                                                                               ####\n");
-	printf("\n");
-	printf("\n");
-}
+		printf("\n\n\n\n");
+		printf("  ###################    #######   ## ##      ##########              ##              #########   ###\n");
+		printf("  ##################    ########   ## ##      ###    ###            ######            ########    ###\n");
+		printf("       ##     ##            ###  #### ##      ###    ###           ########           ##          ###\n");
+		printf("        #     #          #####   #### ##      ##########          ##########          ######   ######\n");
+		printf("  ###################     ###      ## ##         ###             #####   #####        ######   ######\n");
+		printf("  ##################      ##       #  #     ###############     #####     ######      ##          ###\n");
+		printf("          ###                  ####         ##############     #####       ######     #######     ###\n");
+		printf("          ###               ####  ####         ##                                     ########    ###\n");
+		printf("######################     ####    ####        ##       #     ####################               ####\n");
+		printf("  ###################     ####       ###       #########      ###################               ####\n");
+		printf("                                                                                               ####\n");
+		printf("\n");
+		printf("\n");
+	}
+
+void start_story() {
+		char name[20];
+		system("cls");
+		printf("이 세계에는 '포켓몬스터'\n\n");
+		Sleep(2000);
+		printf("줄여서 포켓몬이라 불리는 신기한 생명체가 도처에 살고있다.\n\n");
+		Sleep(2000);
+		printf("우리 인간은 포켓몬과 사이좋게 살고있다.\n\n");
+		Sleep(2000);
+		printf("함께 놀기도 하고 힘을 합쳐 일을 하기도 하고\n\n");
+		Sleep(2000);
+		printf("그리고 포켓몬끼리 싸우게 하여 유대감을 돈독히 다지기도 한다.\n\n");
+		Sleep(2000);
+		system("cls");
+		printf("...\n\n");
+		Sleep(2500);
+		printf("당신의 이름은?\n\n");
+		scanf("%s", &name);
+		system("cls");
+		Sleep(1000);
+		printf("%s!!\n\n", name);
+		Sleep(2000);
+		printf("이제부터 당신만의 이야기가 시작된다.\n\n");
+		Sleep(2000);
+		printf("그럼 포켓몬스터의 세계로!\n\n");
+		Sleep(2000);
+	}
