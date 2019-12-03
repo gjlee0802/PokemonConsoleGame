@@ -98,7 +98,7 @@ int main()
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
 
-	Sptr->sceneNum = 3;
+	Sptr->sceneNum = 0;
 
 
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
@@ -108,8 +108,8 @@ int main()
 	Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 	Sptr->story1 = 0;
 	Sptr->story2 = 0;
-	Sptr->HeroX = 11;
-	Sptr->HeroY = 12;
+	Sptr->HeroX = 48;
+	Sptr->HeroY = 25;
 	//Sptr->HeroX = 8;
 	//Sptr->HeroY = 24;
 
@@ -931,6 +931,11 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 			teleportMap(Sptr, 0, 1);
 		else if (Sptr->HeroX == 7 && Sptr->HeroY == 24)
 			teleportMap(Sptr, 0, 2);
+
+		if ((Sptr->HeroX == 49 && Sptr->HeroY == 24) ||
+			(Sptr->HeroX == 49 && Sptr->HeroY == 25) ||
+			(Sptr->HeroX == 49 && Sptr->HeroY == 26))
+			teleportMap(Sptr, 0, 3);
 		break;
 	case 1:   // 연구소
 	   // Check entrance
@@ -950,6 +955,7 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 				getch();
 				Sptr->story1 = 1;
 			}
+		
 		}
 		//choice pokemon
 		if (Sptr->story1 == 1) {
@@ -1033,6 +1039,11 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 		if ((Sptr->HeroX == 10 && Sptr->HeroY == 18) ||
 			(Sptr->HeroX == 9 && Sptr->HeroY == 18))
 			teleportMap(Sptr, 2, 0);
+	case 3:
+		if ((Sptr->HeroX == 0 && Sptr->HeroY == 24) ||
+			(Sptr->HeroX == 0 && Sptr->HeroY == 25) ||
+			(Sptr->HeroX == 0 && Sptr->HeroY == 26))
+			teleportMap(Sptr, 3, 0);
 	}
 }
 
@@ -1063,6 +1074,19 @@ void teleportMap(scene* Sptr, int sceneNum0, int sceneNum1)
 		Sptr->HeroY = 18;
 		Sptr->sceneNum = 2;
 	}
+	else if (sceneNum0 == 3 && sceneNum1 == 0)
+	{
+		Sptr->HeroX = 49;
+		Sptr->HeroY = 24;
+		Sptr->sceneNum = 0;
+	}
+	else if (sceneNum0 == 0 && sceneNum1 == 3)
+	{
+		Sptr->HeroX = 0;
+		Sptr->HeroY = 24;
+		Sptr->sceneNum = 3;
+	}
+	
 
 }
 
@@ -1183,6 +1207,11 @@ void sceneMap(scene* Sptr) {
 			Sptr->Coor[20][j] = '('; Sptr->Coor[20][j + 1] = ')';
 			Sptr->Coor[22][j] = '|'; Sptr->Coor[22][j + 1] = '|';
 		}
+
+		//door open
+		Sptr->Coor[24][49] = ' ';
+		Sptr->Coor[25][49] = ' ';
+		Sptr->Coor[26][49] = ' ';
 
 		// HERO
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
@@ -1474,11 +1503,10 @@ void sceneMap(scene* Sptr) {
 		for (i = 28; i < 41; i++)
 			Sptr->Coor[13][i] = '^';
 
-
-
-
-
-
+		//door open
+		Sptr->Coor[24][0] = ' ';
+		Sptr->Coor[25][0] = ' ';
+		Sptr->Coor[26][0] = ' ';
 
 		Sptr->Coor[Sptr->HeroY][Sptr->HeroX] = 'H';
 		break;
