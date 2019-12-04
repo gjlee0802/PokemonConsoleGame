@@ -78,6 +78,9 @@ void sceneMap(scene*);
 void scenePrint(scene*);
 void move(scene*, int);
 int isColi(scene*, int, int);
+int myrand90(); //90%확률 발생
+int myrand80(); // 80%확률 발생
+
 //
 int keyControl();
 void setColor(int, int);
@@ -186,6 +189,9 @@ void battleMenu(scene* Sptr)
 	int skillNum = 0;
 	int damage = 0;
 	int temp;
+	int nonPokeIndex;
+	int prob;
+
 
 	while (1)
 	{
@@ -323,8 +329,49 @@ void battleMenu(scene* Sptr)
 						break;
 					}
 				} while (1);
-				
 				break;
+			case '3': //몬스터볼
+				for (int i = 0; i < 6; i++) {
+					if (Sptr->myPokeNum[i] == 0) {
+						nonPokeIndex = i;
+						break;
+					}
+				}
+
+				system("cls");
+
+				printf("가랏! 몬스터볼!\n");
+
+				Sleep(2000);
+				printf("\n...\n"); // 첫번째 흔들림 : 확률 100%
+				Sleep(2000);
+
+				if (myrand90() == 1) {
+					printf("\n...\n"); // 두번째 흔들림 : 확률 90%
+					Sleep(2000);
+					if (myrand80() == 1) {
+						printf("\n...\n");
+						Sleep(2000);
+						printf("\n!!!\n");
+						Sleep(1000);
+						printf("\n%s를 붙잡았다!", Sptr->enemyPokeName);
+						Sleep(2000);
+						Sptr->myPokeNum[nonPokeIndex] = Sptr->enemyPokeNum;
+						return;
+					}
+					else {
+						printf("\n실패했다!\n");
+						Sleep(2000);
+					}
+
+				}
+				else {
+					printf("\n실패했다!\n");
+					Sleep(2000);
+				}
+				break;
+
+
 			case '4':   //도망간다.
 				setColor(10, 0);
 				printf(">> 도망쳤다.!\n");
@@ -1951,6 +1998,7 @@ void pokeNameFind(int pokeNum, char* pokeName)
 		strcpy(pokeName, (const char*)pokemon_name);
 	}
 
+
 void pokemonPrint(int pokeNum, int onlyHead)
 	{
 		HANDLE fileSearch;
@@ -2447,3 +2495,22 @@ void start_story() {
 		printf("그럼 포켓몬스터의 세계로!\n\n");
 		Sleep(2000);
 	}
+
+int myrand90() {
+	srand(time(NULL));
+	int prob;
+	prob = rand() % 10;
+	if (prob == 0 || prob == 1 || prob == 2 || prob == 3 || prob == 4 || prob == 5 || prob == 6 || prob == 7 || prob == 8)
+		return 1;
+	else
+		return 0;
+}
+int myrand80() {
+	srand(time(NULL));
+	int prob;
+	prob = rand() % 10;
+	if (prob == 0 || prob == 1 || prob == 2 || prob == 3 || prob == 4 || prob == 5 || prob == 6 || prob == 7)
+		return 1;
+	else
+		return 0;
+}
