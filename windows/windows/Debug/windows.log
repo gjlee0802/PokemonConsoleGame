@@ -1,83 +1,84 @@
 ﻿  main.cpp
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(228,1): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(233,1): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(1323): message : 'itoa' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(247,20): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(313,32): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(368,6): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(446,32): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(499,7): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(568,21): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(580,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(665,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(609,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(250,20): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(310,32): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(361,6): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(435,32): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(486,7): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(555,21): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(565,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(634,23): warning C4804: '<': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(653,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(596,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(719,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(702,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(753,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(736,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(787,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(770,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(822,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(805,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(857,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(840,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(892,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(875,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(927,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(910,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(962,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(945,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(997,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(980,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1318,20): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1366,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1353,20): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1401,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1368,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1403,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1370,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1405,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1380,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1415,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1384,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1419,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1394,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1429,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1398,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1433,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1406,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1441,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1410,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1445,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1420,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1455,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1422,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1457,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1424,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1459,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1426,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1461,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1430,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1465,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1432,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1467,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1434,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1469,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1436,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1471,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1440,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1475,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1442,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1477,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1444,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1479,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1446,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1481,1): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2080,28): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2458,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2485,2): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2115,28): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2493,29): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2520,2): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\conio.h(453): message : 'getch' 선언을 참조하십시오.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(513): warning C4715: 'applyDisease': 모든 제어 경로에서 값을 반환하지는 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1094): warning C4715: 'techVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1181): warning C4715: 'pokeVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
-C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2504): warning C4715: 'keyControl': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1085): warning C4715: 'techVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(1196): warning C4715: 'pokeVal': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(500): warning C4715: 'applyDisease': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\이경주\Desktop\PokemonConsoleGame\windows\windows\main.cpp(2539): warning C4715: 'keyControl': 모든 제어 경로에서 값을 반환하지는 않습니다.
   windows.vcxproj -> C:\Users\이경주\Desktop\PokemonConsoleGame\windows\Debug\windows.exe
