@@ -145,14 +145,16 @@ int main(void)
 	}
 
 
-	// 내 포켓몬 생성
+	// 내 포켓몬 생성 (테스트용 코드)
+	/*
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeNum[1] = 7;
-
+	*/
 
 	for (int i = 0; i < 6; i++) {
 		Sptr->myPokeLevel[i] = 5;
-		Sptr->myPokeHealth[i] = Sptr->myPokeLevel[i] * (pokeVal(Sptr->myPokeNum[i], "HP") + 20000) / 50;
+		Sptr->myPokeHealth[i] = Sptr->myPokeLevel[i] * (pokeVal(Sptr->myPokeNum[i], "HP") + 200) / 50;
+		Sptr->myMaxHP[i] = Sptr->myPokeHealth[i];
 		Sptr->myPokeExp[i] = 0;
 		Sptr->LevelUpExp[i] = (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1);
 	}
@@ -803,6 +805,11 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 								printf("\n%s를 붙잡았다!", Sptr->enemyPokeName);
 								Sleep(2000);
 								Sptr->myPokeNum[nonPokeIndex] = Sptr->enemyPokeNum;
+								Sptr->myPokeLevel[nonPokeIndex] = Sptr->enemyPokeLevel;
+								Sptr->myPokeHealth[nonPokeIndex] = Sptr->enemyPokeHealth;
+								Sptr->myMaxHP[nonPokeIndex] = Sptr->enemyMaxHP;
+								Sptr->myPokeExp[nonPokeIndex] = 0;
+								Sptr->LevelUpExp[nonPokeIndex] = (Sptr->enemyPokeLevel + 1) * (Sptr->enemyPokeLevel + 1) * (Sptr->enemyPokeLevel + 1);
 								return;
 							}
 							else {
@@ -854,10 +861,6 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 					printf(">> 상대 포켓몬(%s)이 공격하여 데미지를 %d만큼 입었다!\n", Sptr->enemyPokeName, damage);
 					Sleep(3000);
 				}
-				///  질병에 걸리게 함.======================================== TEST 용 코드 =======================
-				// 추후 특정 기술 발동시에 공격을 받는 포켓몬에게 일정확률로 적용되도록 해야함.
-				// 질병은 특정 타입의 포켓몬에게 적용이 되지 않으므로 이러한 타입에 대한 예외도 고려하도록 해야함. 
-				//myturn++;
 			}
 			myturn = 1;
 		}
@@ -1555,7 +1558,7 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 20)	// 기술 명중확률 20%
 		{
-			printf("스킬이 맞지 않았다!!");
+			printf("기술이 맞지 않았다!!");
 			Sleep(1000);
 			dmg = 0;
 		}
@@ -1588,11 +1591,6 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 	// 데미지 계산 식 구현
 	if (myturn == true)
 	{
-		/*
-		dmg = dmg *
-		   pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK")
-		   * ((Sptr->myPokeLevel[Sptr->currPokeIndex] * 2/5 + 2)/pokeVal(Sptr->enemyPokeNum, "DEF")/50+2)
-		   * 1;*/
 		dmg = dmg *
 			pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK") / pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "DEF") *
 			(Sptr->myPokeLevel[Sptr->currPokeIndex] + 2) / 50 * typeRel(skillNum, Sptr->enemyPokeNum)
