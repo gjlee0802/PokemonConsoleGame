@@ -88,8 +88,6 @@ struct skillInform {
 };
 typedef struct skillInform SkillInforms;
 
-int wildPokeList[9] = { 1,4,7,10,16,19,25,39,43 };
-
 // ** Functions
 // 포켓몬 정보 획득 관련
 void pokeNameFind(int, char*);   // Param1: pokeNum, Param2: pokeName(추출한 포켓몬 이름이 저장될 문자열 공간의 주소)
@@ -104,7 +102,7 @@ int fightMenu(scene*, SkillInforms*, int);
 void skillPrint(const char*);   // Param1: 파일(경로) 이름
 int pokeVal(int, const char*);	// Param1: 정보를 얻고자 하는 포켓몬의 도감번호, Param2: 검색 키워드 (ex. "HP", "ATK", "DEF" ...)
 float typeRel(int, int);		// typeRelativity(타입 관계)의 약자, Param1: 공격기술의 번호(techNum), Param2: 공격을 받는 포켓몬 번호(pokeNum)
-int useSkill(scene*, int, int); // Param2: skillNum
+int useSkill(scene*, SkillInforms*, int, int); // Param2: skillNum
 // 맵, 스토리 관리 관련
 void checkEvent(scene*);
 void teleportMap(scene*, int, int);   // Param 2: 이동하기 전의 sceneNum, Param 3: 이동할 sceneNum
@@ -124,10 +122,6 @@ int myrand80();
 /* MAIN Function */
 int main(void)
 {
-	//pokemonPrint(25,false);   // 포켓몬 그림 테스트용 코드 테스트 안하면 주석처리.
-
-	Sleep(3000);
-
 	system("mode con cols=120 lines=120");
 
 	// 향후 주석해제
@@ -150,6 +144,7 @@ int main(void)
 		Sptr->myMaxHP[i] = 0;
 	}
 
+	/*
 	// 내 포켓몬 생성
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeNum[1] = 7;
@@ -161,6 +156,7 @@ int main(void)
 		Sptr->myPokeExp[i] = 0;
 		Sptr->LevelUpExp[i] = (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1);
 	}
+	*/
 	
 
 	Sptr->story1 = 0;
@@ -223,6 +219,8 @@ int findAlivePokeIndex(scene* Sptr)
 
 void battleInit(scene* Sptr)
 {
+	int wildPokeList[9] = { 1,4,7,10,16,19,25,39,43 };	// 등장할 수 있는 포켓몬 리스트
+
 	SkillInforms* SIptr;
 	SIptr = (SkillInforms*)malloc(sizeof(SkillInforms));
 	// ---------구조체 초기화
@@ -247,9 +245,11 @@ void battleInit(scene* Sptr)
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
 	// 야생포켓몬 필수 정보 초기화
-	Sptr->enemyPokeLevel = 5 + ((rand() % 3) - (rand() % 3));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
+	Sptr->enemyPokeLevel = 3 + ((rand() % 2) - (rand() % 2));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
 	Sptr->enemyMaxHP = Sptr->enemyPokeHealth;
+	printf("야생포켓몬이 등장했다!!\n");
+	Sleep(1000);
 	pokemonPrint(Sptr->enemyPokeNum, false);
 	battleMenu(Sptr, SIptr);
 	free(SIptr);
@@ -257,12 +257,6 @@ void battleInit(scene* Sptr)
 
 int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)		// SKIP을 한다면 0을 반환, SKIP을 하지 않는다면 1을 반환한다.	// will Continue?를 반환 True/False
 {
-	/*
-		// 옮겨야함 SIptr에 넣기
-		int myMaxHP, enemyMaxHP;
-		myMaxHP = Sptr->myPokeHealth[Sptr->currPokeIndex] = Sptr->myPokeLevel[Sptr->currPokeIndex] * (pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
-		enemyMaxHP = Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
-	*/
 	// 내 차례일 경우
 	if (myturn == true)
 	{
@@ -276,10 +270,9 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 			{
 			case 기본:
 				SIptr->myTimeStack[Sptr->currPokeIndex] = 0;	// 기본 상태라면 경과시간 0으로 초기화
-				printf("기본상태\n");
 				return 1;
 			case 수면:
-				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 5)
+				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 3)
 				{
 					SIptr->myTimeStack[Sptr->currPokeIndex] = 0;
 					SIptr->myDisease[Sptr->currPokeIndex] = 0;
@@ -291,7 +284,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 				Sleep(1000);
 				return 0;
 			case 독:
-				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 5)
+				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 3)
 				{
 					SIptr->myTimeStack[Sptr->currPokeIndex] = 0;
 					SIptr->myDisease[Sptr->currPokeIndex] = 0;
@@ -310,7 +303,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 				}
 				return 1;
 			case 화상:
-				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 5)
+				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 3)
 				{
 					SIptr->myTimeStack[Sptr->currPokeIndex] = 0;
 					SIptr->myDisease[Sptr->currPokeIndex] = 0;
@@ -319,7 +312,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 					return 1;
 				}
 				int dmg;
-				dmg = (Sptr->myMaxHP[Sptr->currPokeIndex] / 16);	// 최대 체력의 1/16 데미지
+				dmg = Sptr->myMaxHP[Sptr->currPokeIndex] / 16 + 1;	// 최대 체력의 1/16 데미지
 				Sptr->myPokeHealth[Sptr->currPokeIndex] = Sptr->myPokeHealth[Sptr->currPokeIndex] - dmg;
 				printf("포켓몬이 화상을 입었다!\n");
 				Sleep(1000);
@@ -342,7 +335,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 			}
 			else if (SIptr->myDisease[Sptr->currPokeIndex] == 마비)
 			{
-				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 5)
+				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 3)
 				{
 					SIptr->myTimeStack[Sptr->currPokeIndex] = 0;
 					SIptr->myDisease[Sptr->currPokeIndex] = 0;
@@ -369,7 +362,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 			}
 			else if (SIptr->myDisease[Sptr->currPokeIndex] == 혼란)
 			{
-				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 5)
+				if (SIptr->myTimeStack[Sptr->currPokeIndex] >= 3)
 				{
 					SIptr->myTimeStack[Sptr->currPokeIndex] = 0;
 					SIptr->myDisease[Sptr->currPokeIndex] = 0;
@@ -386,7 +379,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 					dmg = dmg *
 						pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "ATK") / pokeVal(Sptr->myPokeNum[Sptr->currPokeIndex], "DEF") *
 						(Sptr->myPokeLevel[Sptr->currPokeIndex] + 2) / 50 * typeRel(SIptr->lastUsedSkill, Sptr->myPokeNum[Sptr->currPokeIndex])
-						+ rand() % 5;
+						+ rand() % 5 + 1;
 
 					Sptr->myPokeHealth[Sptr->currPokeIndex] = Sptr->myPokeHealth[Sptr->currPokeIndex] - dmg;
 					printf("포켓몬이 자신을 때렸다!\n");
@@ -419,7 +412,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 				SIptr->enemyTimeStack = 0;
 				return 1;
 			case 수면:
-				if (SIptr->enemyTimeStack >= 5)
+				if (SIptr->enemyTimeStack >= 3)
 				{
 					SIptr->enemyTimeStack = 0;
 					SIptr->enemyDisease = 0;
@@ -432,7 +425,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 				return 0;
 
 			case 독:
-				if (SIptr->enemyTimeStack >= 5)
+				if (SIptr->enemyTimeStack >= 3)
 				{
 					SIptr->enemyTimeStack = 0;
 					SIptr->enemyDisease = 0;
@@ -451,7 +444,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 				}
 				return 1;
 			case 화상:
-				if (SIptr->enemyTimeStack >= 5)
+				if (SIptr->enemyTimeStack >= 3)
 				{
 					SIptr->enemyTimeStack = 0;
 					SIptr->enemyDisease = 0;
@@ -460,7 +453,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 					return 1;
 				}
 				int dmg;
-				dmg = (Sptr->enemyMaxHP / 16);	// 최대 체력의 1/16 데미지
+				dmg = Sptr->enemyMaxHP / 16 + 1;	// 최대 체력의 1/16 데미지
 				Sptr->enemyPokeHealth = Sptr->enemyPokeHealth - dmg;
 				printf("포켓몬이 화상을 입었다!\n");
 				Sleep(1000);
@@ -482,7 +475,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 			}
 			else if (SIptr->enemyDisease == 마비)
 			{
-				if (SIptr->enemyTimeStack >= 5)
+				if (SIptr->enemyTimeStack >= 3)
 				{
 					SIptr->enemyTimeStack = 0;
 					SIptr->enemyDisease = 0;
@@ -509,7 +502,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 			}
 			else if (SIptr->enemyDisease == 혼란)
 			{
-				if (SIptr->enemyTimeStack >= 5)
+				if (SIptr->enemyTimeStack >= 3)
 				{
 					SIptr->enemyTimeStack = 0;
 					SIptr->enemyDisease = 0;
@@ -526,7 +519,7 @@ int applyDisease(scene* Sptr, SkillInforms* SIptr, int myturn, int skillchoosed)
 					dmg = dmg *
 						pokeVal(Sptr->enemyPokeNum, "ATK") / pokeVal(Sptr->enemyPokeNum, "DEF") *
 						(Sptr->enemyPokeLevel + 2) / 50 * typeRel(SIptr->lastUsedSkill, Sptr->enemyPokeNum)
-						+ rand() % 5;
+						+ rand() % 5 + 1;
 
 					Sptr->enemyPokeHealth = Sptr->enemyPokeHealth - dmg;
 					printf("포켓몬이 자신을 때렸다!\n");
@@ -562,7 +555,15 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 		if (first_alive_poke >= 0)						// 포켓몬이 살아있다면. 
 		{
 			if (Sptr->myPokeHealth[Sptr->currPokeIndex] <= 0)
+			{
+				//char pokeName[100];
+				printf("%s가 쓰러졌다...\n", Sptr->currPokeName);
+				Sleep(1000);
 				Sptr->currPokeIndex = first_alive_poke;	// 출전할 포켓몬을 6마리 포켓몬의 배열중 가장 먼저 찾은 살아있는 포켓몬으로 정한다.
+				pokeNameFind(Sptr->myPokeNum[Sptr->currPokeIndex], Sptr->currPokeName);
+				printf("가랏! %s!\n", Sptr->currPokeName);
+				Sleep(1000);
+			}
 		}
 		else											// 포켓몬이 모두 쓰러졌다면.
 		{
@@ -607,8 +608,7 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 		{
 			// 포켓몬 질병 효과 적용-------------------------------------------------------
 			keepTurn = applyDisease(Sptr, SIptr, myturn, 0);
-			printf("myturn:%d, keepTurn:%d\n", myturn, keepTurn);
-			Sleep(5000);
+			Sleep(1000);
 			if (!keepTurn)
 			{
 				// Skip(아무것도 안하고 턴 넘기기)
@@ -617,7 +617,6 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 			{
 				while (true)
 				{
-					printf("TEST:%d\n",Sptr->currPokeIndex);
 					// 포켓몬 상태 출력
 					setColor(10, 0);
 					printf("\n=====#=====#=====#=====#=====#=====#=====#=====#=====#\n");
@@ -720,7 +719,7 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 						}
 						if (applyDisease(Sptr, SIptr, myturn, 1) == 1)
 						{
-							damage = useSkill(Sptr, skillNum, myturn);
+							damage = useSkill(Sptr, SIptr, skillNum, myturn);
 							Sptr->enemyPokeHealth = Sptr->enemyPokeHealth - damage;
 							setColor(10, 0);
 							printf(">> %s가 상대 포켓몬(%s)에게 데미지를 %d만큼 입혔다!\n", Sptr->currPokeName, Sptr->enemyPokeName, damage);
@@ -829,8 +828,7 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 			srand((unsigned int)time(NULL));
 
 			keepTurn = applyDisease(Sptr, SIptr, myturn, 0);
-			printf("myturn:%d, keepTurn:%d\n", myturn, keepTurn);
-			Sleep(5000);
+			Sleep(1000);
 			if (!keepTurn)
 			{
 				// Skip(아무것도 안하고 턴넘기기)
@@ -840,7 +838,7 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 				skillNum = fightMenu(Sptr, SIptr, myturn);
 				if (applyDisease(Sptr, SIptr, myturn, 1) == 1)
 				{
-					damage = useSkill(Sptr, skillNum, myturn);
+					damage = useSkill(Sptr, SIptr, skillNum, myturn);
 					Sptr->myPokeHealth[Sptr->currPokeIndex] = Sptr->myPokeHealth[Sptr->currPokeIndex] - damage;
 					setColor(10, 0);
 					printf(">> 상대 포켓몬(%s)이 공격하여 데미지를 %d만큼 입었다!\n", Sptr->enemyPokeName, damage);
@@ -849,8 +847,6 @@ void battleMenu(scene* Sptr, SkillInforms* SIptr)
 				///  질병에 걸리게 함.======================================== TEST 용 코드 =======================
 				// 추후 특정 기술 발동시에 공격을 받는 포켓몬에게 일정확률로 적용되도록 해야함.
 				// 질병은 특정 타입의 포켓몬에게 적용이 되지 않으므로 이러한 타입에 대한 예외도 고려하도록 해야함. 
-				printf("나의 포켓몬이 화상에 걸렸다!\n");
-				SIptr->myDisease[Sptr->currPokeIndex] = 화상;
 				//myturn++;
 			}
 			myturn = 1;
@@ -1426,7 +1422,8 @@ float typeRel(int techNum, int victimNum)
 	return type_matrix[attack_type][victim_type];
 }
 
-int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리턴한다.
+// 0:기본 1:마비 2:수면 3:독  4:혼란 5:화상
+int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리턴한다.
 {
 	double dmg;
 	switch (skillNum)
@@ -1445,6 +1442,12 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 60;
 		setColor(9, 0);
 		skillPrint("water_WhirlPool.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 30)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 4; printf("야생 포켓몬이 혼란스럽다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 4; printf("내 포켓몬이 혼란스럽다!\n"); Sleep(1000); }
+		}
 		break;
 	case 역린:
 		dmg = 120;
@@ -1455,11 +1458,23 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 120;
 		setColor(14, 0);
 		skillPrint("attack_hit_Electric_2.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 30)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 4; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 4; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+		}
 		break;
 	case 번개:
 		dmg = 110;
 		setColor(14, 0);
 		skillPrint("elec_Thunder.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 30)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 1; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 1; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+		}
 		break;
 	case 솔라빔:
 		dmg = 120;
@@ -1480,11 +1495,23 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 90;
 		setColor(12, 0);
 		skillPrint("attack_hit_Fire_3.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 40)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000);}
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000);}
+		}
 		break;
 	case 불꽃세례:
 		dmg = 40;
 		setColor(12, 0);
 		skillPrint("fire_Ember.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 30)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000);}
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000);}
+		}
 		break;
 	case 몸통박치기:
 		dmg = 50;
@@ -1515,6 +1542,13 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 90;
 		setColor(6, 0);
 		skillPrint("bug_Bug_Buzz.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 20)	// 기술 명중확률 20%
+		{
+			printf("스킬이 맞지 않았다!!");
+			Sleep(1000);
+			dmg = 0;
+		}
 		break;
 	case 모래뿌리기:
 		dmg = 40;
@@ -1530,6 +1564,12 @@ int useSkill(scene* Sptr, int skillNum, int myturn)   // 레벨에 따라 데미지를 리
 		dmg = 10;
 		setColor(13, 0);
 		skillPrint("psyc_Confusion.txt");
+		srand((unsigned int)time(NULL));
+		if (rand() % 100 <= 80)
+		{
+			if (myturn == true) { SIptr->enemyDisease = 2; printf("야생 포켓몬이 졸고 있다!\n"); Sleep(1000);}
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 2; printf("내 포켓몬이 졸고 있다!\n"); Sleep(1000);}
+		}
 		break;
 	default:
 		dmg = 0;
@@ -1607,6 +1647,10 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 				Sptr->yesorno = getch();
 				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
 					Sptr->myPokeNum[0] = 1;
+					Sptr->myPokeLevel[0] = 5;
+					Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * (pokeVal(Sptr->myPokeNum[0], "HP") + 200) / 50;
+					Sptr->myPokeExp[0] = 0;
+					Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 					printf("이상해씨를 손에 넣었다!");
 					getch();
 					Sptr->story2 = 1;
@@ -1621,6 +1665,10 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 				Sptr->yesorno = getch();
 				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
 					Sptr->myPokeNum[0] = 4;
+					Sptr->myPokeLevel[0] = 5;
+					Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * (pokeVal(Sptr->myPokeNum[0], "HP") + 200) / 50;
+					Sptr->myPokeExp[0] = 0;
+					Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 					printf("파이리를 손에 넣었다!");
 					getch();
 					Sptr->story2 = 1;
@@ -1633,6 +1681,10 @@ void checkEvent(scene* Sptr)   // This function would be executed when SPACE key
 				Sptr->yesorno = getch();
 				if (Sptr->yesorno == 'y' || Sptr->yesorno == 'Y') {
 					Sptr->myPokeNum[0] = 7;
+					Sptr->myPokeLevel[0] = 5;
+					Sptr->myPokeHealth[0] = Sptr->myPokeLevel[0] * (pokeVal(Sptr->myPokeNum[0], "HP") + 200) / 50;
+					Sptr->myPokeExp[0] = 0;
+					Sptr->LevelUpExp[0] = (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1) * (Sptr->myPokeLevel[0] + 1);
 					printf("꼬부기를 손에 넣었다!");
 					getch();
 					Sptr->story2 = 1;
