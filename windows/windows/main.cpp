@@ -124,9 +124,9 @@ int main(void)
 {
 	system("mode con cols=120 lines=120");
 
-	// 향후 주석해제
-	//titleDraw();
-	//start_story();
+	
+	titleDraw();
+	start_story();
 
 	scene* Sptr;
 	Sptr = (scene*)malloc(sizeof(scene));
@@ -144,7 +144,7 @@ int main(void)
 		Sptr->myMaxHP[i] = 0;
 	}
 
-	/*
+
 	// 내 포켓몬 생성
 	Sptr->myPokeNum[0] = 4;   // 향후 연구소에서 지정하도록 설정.
 	Sptr->myPokeNum[1] = 7;
@@ -152,12 +152,12 @@ int main(void)
 
 	for (int i = 0; i < 6; i++) {
 		Sptr->myPokeLevel[i] = 5;
-		Sptr->myPokeHealth[i] = Sptr->myPokeLevel[i] * (pokeVal(Sptr->myPokeNum[i], "HP") + 200) / 50;
+		Sptr->myPokeHealth[i] = Sptr->myPokeLevel[i] * (pokeVal(Sptr->myPokeNum[i], "HP") + 20000) / 50;
 		Sptr->myPokeExp[i] = 0;
 		Sptr->LevelUpExp[i] = (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1) * (Sptr->myPokeLevel[i] + 1);
 	}
-	*/
-	
+
+
 
 	Sptr->story1 = 0;
 	Sptr->story2 = 0;
@@ -219,7 +219,7 @@ int findAlivePokeIndex(scene* Sptr)
 
 void battleInit(scene* Sptr)
 {
-	int wildPokeList[9] = { 1,4,7,10,16,19,25,39,43 };	// 등장할 수 있는 포켓몬 리스트
+	int wildPokeList[6] = { 10,16,19,25,39,43 };	// 등장할 수 있는 포켓몬 리스트
 
 	SkillInforms* SIptr;
 	SIptr = (SkillInforms*)malloc(sizeof(SkillInforms));
@@ -238,14 +238,24 @@ void battleInit(scene* Sptr)
 	Sptr->currPokeIndex = findAlivePokeIndex(Sptr);
 
 	// 배틀에 등장할 야생 포켓몬 정하기
+
 	srand((unsigned int)time(NULL));
-	//wildPoke = rand() % 116 + 1;	// 출현할 야생 포켓몬을 랜덤으로 정함.
-	wildPoke = 39;
+
+	if (Sptr->sceneNum == 0) {
+		wildPoke = wildPokeList[rand() % 3];	// 출현할 야생 포켓몬을 랜덤으로 정함.
+		Sptr->enemyPokeLevel = rand() % 3 + 3;   // 1번맵에서는 3~6렙
+	}
+	else if (Sptr->sceneNum == 3) {
+		wildPoke = wildPokeList[rand() % 3 + 3];
+		Sptr->enemyPokeLevel = rand() % 5 + 6;
+	}
+
+
+
 	itoa(wildPoke, file_name, 10);
 	Sptr->enemyPokeNum = wildPoke;
 	srand((unsigned int)time(NULL));
 	// 야생포켓몬 필수 정보 초기화
-	Sptr->enemyPokeLevel = 3 + ((rand() % 2) - (rand() % 2));   // 레벨 1부터 15까지의 야생 포켓몬이 출현함.
 	Sptr->enemyPokeHealth = Sptr->enemyPokeLevel * (pokeVal(Sptr->enemyPokeNum, "HP") + 200) / 50;   // 체력은 (레벨 * (종족값 + 200) / 50)으로 설정
 	Sptr->enemyMaxHP = Sptr->enemyPokeHealth;
 	printf("야생포켓몬이 등장했다!!\n");
@@ -1461,8 +1471,8 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 30)
 		{
-			if (myturn == true) { SIptr->enemyDisease = 4; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
-			else { SIptr->myDisease[Sptr->currPokeIndex] = 4; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+			if (myturn == true) { SIptr->enemyDisease = 4; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 4; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000); }
 		}
 		break;
 	case 번개:
@@ -1472,8 +1482,8 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 30)
 		{
-			if (myturn == true) { SIptr->enemyDisease = 1; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
-			else { SIptr->myDisease[Sptr->currPokeIndex] = 1; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000);}
+			if (myturn == true) { SIptr->enemyDisease = 1; printf("야생 포켓몬의 몸이 마비되었다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 1; printf("내 포켓몬의 몸이 마비되었다!\n"); Sleep(1000); }
 		}
 		break;
 	case 솔라빔:
@@ -1498,8 +1508,8 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 40)
 		{
-			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000);}
-			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000);}
+			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000); }
 		}
 		break;
 	case 불꽃세례:
@@ -1509,8 +1519,8 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 30)
 		{
-			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000);}
-			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000);}
+			if (myturn == true) { SIptr->enemyDisease = 5; printf("야생 포켓몬이 화상입었다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 5; printf("내 포켓몬이 화상입었다!\n"); Sleep(1000); }
 		}
 		break;
 	case 몸통박치기:
@@ -1567,8 +1577,8 @@ int useSkill(scene* Sptr, SkillInforms* SIptr, int skillNum, int myturn)   // 레
 		srand((unsigned int)time(NULL));
 		if (rand() % 100 <= 80)
 		{
-			if (myturn == true) { SIptr->enemyDisease = 2; printf("야생 포켓몬이 졸고 있다!\n"); Sleep(1000);}
-			else { SIptr->myDisease[Sptr->currPokeIndex] = 2; printf("내 포켓몬이 졸고 있다!\n"); Sleep(1000);}
+			if (myturn == true) { SIptr->enemyDisease = 2; printf("야생 포켓몬이 졸고 있다!\n"); Sleep(1000); }
+			else { SIptr->myDisease[Sptr->currPokeIndex] = 2; printf("내 포켓몬이 졸고 있다!\n"); Sleep(1000); }
 		}
 		break;
 	default:
@@ -3048,16 +3058,27 @@ void setColor(int color, int bgcolor)
 void titleDraw() {
 	printf("\n\n\n\n");
 	printf("  ###################    #######   ## ##      ##########              ##              #########   ###\n");
+	Sleep(150);
 	printf("  ##################    ########   ## ##      ###    ###            ######            ########    ###\n");
+	Sleep(150);
 	printf("       ##     ##            ###  #### ##      ###    ###           ########           ##          ###\n");
+	Sleep(150);
 	printf("        #     #          #####   #### ##      ##########          ##########          ######   ######\n");
+	Sleep(150);
 	printf("  ###################     ###      ## ##         ###             #####   #####        ######   ######\n");
+	Sleep(150);
 	printf("  ##################      ##       #  #     ###############     #####     ######      ##          ###\n");
+	Sleep(150);
 	printf("          ###                  ####         ##############     #####       ######     #######     ###\n");
+	Sleep(150);
 	printf("          ###               ####  ####         ##                                     ########    ###\n");
+	Sleep(150);
 	printf("######################     ####    ####        ##       #     ####################               ####\n");
+	Sleep(150);
 	printf("  ###################     ####       ###       #########      ###################               ####\n");
+	Sleep(150);
 	printf("                                                                                               ####\n");
+	Sleep(2000);
 	printf("\n");
 	printf("\n");
 }
