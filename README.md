@@ -1,5 +1,15 @@
 # PokemonConsoleGame
-# 솔루션 파일은 windows/windows.sln 파일 입니다.
-# 메인코드는 windows/windows/main.cpp 입니다.
-# 실행파일는 windows/Debug/windows.exe입니다.
+## <중요 파일>
+### 솔루션 파일은 windows/windows.sln 파일 입니다.
+### 메인코드는 windows/windows/main.cpp 입니다.
+### 실행파일는 windows/Debug/windows.exe입니다.
 
+## <게임 방법>
+### WASD로 이동합니다.
+### 주인공은 H, 오박사는 P입니다.
+### 풀숲에서 야생포켓몬이 일정 확률로 싸움을 걸어옵니다.
+### 타입상성에 따라 공격 데미지가 달라집니다.
+### 일부 기술은 대상에게 지속 피해(마비, 독, 혼란, 화상)를 줄 수 있습니다.
+### 몬스터볼을 이용해 다양한 포켓몬을 포획할 수 있습니다.
+### 게임을 시작하면 오박사에게서 처음으로 함께할 포켓몬을 받으세요!
+### (오박사는 연구소에 있습니다.)
