@@ -2,7 +2,7 @@
 ## <중요 파일>
 ### 솔루션 파일은 windows/windows.sln 파일 입니다.
 ### 메인코드는 windows/windows/main.cpp 입니다.
-### 실행파일는 windows/Debug/windows.exe입니다.
+### 실행파일은 windows/Debug/windows.exe입니다.
 
 ## <게임 방법>
 ### WASD로 이동합니다.
